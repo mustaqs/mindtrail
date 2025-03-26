@@ -71,6 +71,8 @@ Rollout Plan
 
 - add intelligent AI features:
     - add AI summarization
+
+	hover over open tabs to see summarization 
     What it does:
 	•	Generates short summaries of each saved tab using LLMs (like GPT)
 	•	Helps users recall why they opened that tab, not just what it was

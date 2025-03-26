@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="dark-mode">
     <!-- Top Banner -->
@@ -20,48 +21,112 @@
     </div>
     
     <div class="container">
-        <!-- SECTION 1: The Problem (Hero Section) -->
+        <!-- SECTION 1: Hero Section -->
         <section class="hero">
             <div class="hero-content fade-in glass-card">
-                <h1>😩 Drowning in Browser Tabs?</h1>
-                <p class="subheadline">You're researching, learning, or building — and suddenly you've got 37 tabs open.
-                    You come back the next day… and feel completely lost.</p>
-                <a href="#waitlist" class="cta-button">👉 Meet Your New Research Memory</a>
+                <h1 class="hero-title">Mindtrail</h1>
+                <h2 class="hero-subtitle">Your Thinking Companion for the Web</h2>
+                <div class="hero-description">
+                    <p class="subheadline">Researching, learning, or building something new?</p>
+                    <p class="subheadline">Mindtrail helps you save, organize, and recall your tabs — so you can think clearly, work better, and never lose your place again.</p>
+                </div>
+                <a href="#waitlist" class="cta-button">Try Mindtrail Now!</a>
                 <div class="hero-image">
-                    <img src="https://placehold.co/800x450/1a1a1a/3a86ff?text=Too+Many+Tabs+Open" alt="Browser with too many tabs open" width="700" class="rounded-image">
+                    <img src="https://placehold.co/800x450/1a1a1a/3a86ff?text=Mindtrail+Tab+Management" alt="Mindtrail tab management interface" width="700" class="rounded-image">
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 2: The Solution -->
-        <section class="solution">
+        <!-- SECTION 2: Features Section -->
+        <section class="features">
             <div class="section-content glass-card">
-                <h2>🧠 Your Thinking Companion for the Web</h2>
-                <p class="body-text">
-                    This Chrome extension captures your tab sessions in one click — so you can finally shut your tabs without shutting down your brain.
+                <h2 class="section-title">Stay Organized While You Think and Learn</h2>
+                <p class="section-description">
+                    Mindtrail helps you save only the tabs you care about, add context, and revisit your research with clarity.
                 </p>
-                <p class="body-text">
-                    It saves your session, summarizes what you were reading, and organizes it by topic using AI. When you're ready to return, everything is right where you left off — clear, searchable, and stress-free.
-                </p>
-                <h3>Here's what it helps you do:</h3>
-                <ul class="feature-list">
-                    <li class="feature-item">
-                        <span class="feature-icon">✅</span>
-                        <span>Save & close your tab chaos with one click</span>
-                    </li>
-                    <li class="feature-item">
-                        <span class="feature-icon">🧠</span>
-                        <span>Summarize and group your research using AI</span>
-                    </li>
-                    <li class="feature-item">
-                        <span class="feature-icon">🔁</span>
-                        <span>Resume your sessions with context and clarity</span>
-                    </li>
-                    <li class="feature-item">
-                        <span class="feature-icon">📚</span>
-                        <span>Build a searchable history of your thinking</span>
-                    </li>
-                </ul>
+                
+                <div class="features-container">
+                    <div class="features-column">
+                        <h3 class="features-heading text-center">Available Today</h3>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i data-lucide="save" class="lucide-icon"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <p>Save selected tabs or entire window with one click</p>
+                                </div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i data-lucide="file-text" class="lucide-icon"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <p>Add notes and context to your saved sessions</p>
+                                </div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i data-lucide="search" class="lucide-icon"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <p>Easily find and restore past research sessions</p>
+                                </div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i data-lucide="repeat" class="lucide-icon"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <p>Resume exactly where you left off, anytime</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="features-column">
+                        <h3 class="features-heading text-center">Coming Soon</h3>
+                        <div class="feature-grid future-features">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i data-lucide="brain" class="lucide-icon"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <p>Auto-summarize content from your saved tabs</p>
+                                </div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i data-lucide="tag" class="lucide-icon"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <p>Smart categorization of research by topic</p>
+                                </div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i data-lucide="lightbulb" class="lucide-icon"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <p>Get insights and connections across sessions</p>
+                                </div>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i data-lucide="search-check" class="lucide-icon"></i>
+                                </div>
+                                <div class="feature-content">
+                                    <p>Semantic search through all your saved research</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cta-container">
+                    <a href="#" class="cta-button primary-cta">Try Chrome Extension</a>
+                    <a href="#waitlist" class="cta-button secondary-cta">Join AI Waitlist</a>
+                </div>
             </div>
         </section>
 
@@ -121,5 +186,11 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
 </body>
 </html>
