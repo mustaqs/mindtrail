@@ -1,0 +1,27 @@
+{
+  "name": "mindtrail-landing-page",
+  "version": "1.0.0",
+  "description": "Mindtrail landing page with Tailwind CSS",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./dist/output.css",
+    "watch": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "dev": "next dev",
+    "start": "next start"
+  },
+  "keywords": [
+    "mindtrail",
+    "tailwind",
+    "landing-page"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.3.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.3",
+    "next": "^14.2.26",
+    "resend": "^2.1.0"
+  }
+}
