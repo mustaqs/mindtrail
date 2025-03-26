@@ -13,7 +13,7 @@
     <header>
         <div class="header-content">
             <h1>Mindtrail</h1>
-            <p>Your saved research sessions</p>
+            <p>Thinking Assistant</p>
         </div>
     </header>
 
@@ -42,17 +42,17 @@
 
             <div class="session-actions">
                 <button id="restore-session" class="primary-btn">
-                    <span class="icon">🔄</span> Restore Session
+                    Restore Session
                 </button>
                 <button id="delete-session" class="danger-btn">
-                    <span class="icon">🗑️</span> Delete Session
+                    Delete Session
                 </button>
             </div>
 
-            <div class="session-summary">
-                <h3>AI Summary</h3>
-                <div id="session-summary-content" class="summary-content">
-                    <p class="placeholder-text">AI summary will appear here once generated.</p>
+            <div id="session-context" class="session-context hidden">
+                <h3>Context</h3>
+                <div id="session-context-content" class="context-content">
+                    <!-- Context will be loaded here dynamically -->
                 </div>
             </div>
 

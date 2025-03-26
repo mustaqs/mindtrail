@@ -33,6 +33,10 @@
                 <label for="session-name">Session Name (optional)</label>
                 <input type="text" id="session-name" placeholder="e.g., Research Project or Work Tabs">
             </div>
+            <div class="form-group">
+                <label for="session-context">Context (optional)</label>
+                <textarea id="session-context" placeholder="Add notes about this session..."></textarea>
+            </div>
             <div class="form-group checkbox-group">
                 <input type="checkbox" id="close-tabs" class="checkbox">
                 <label for="close-tabs">Close tabs after saving</label>
@@ -53,6 +57,14 @@
             <div id="current-session-tabs" class="tab-list">
                 <!-- Tab items will be added here dynamically -->
                 <p class="empty-state">Loading your tabs...</p>
+            </div>
+        </div>
+        
+        <div class="saved-sessions">
+            <h2>Recent Sessions</h2>
+            <div id="saved-sessions-list" class="sessions-list">
+                <!-- Saved sessions will be displayed here -->
+                <p class="empty-state">No saved sessions yet</p>
             </div>
         </div>
     </div>

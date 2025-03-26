@@ -110,13 +110,18 @@ label {
     color: var(--text-color);
 }
 
-input[type="text"] {
+input[type="text"], textarea {
     width: 100%;
     padding: 8px;
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
     font-size: 0.9rem;
     font-family: inherit;
+}
+
+textarea {
+    min-height: 60px;
+    resize: vertical;
 }
 
 input[type="text"]:focus {
@@ -182,9 +187,88 @@ button:hover {
     background-color: var(--secondary-hover);
 }
 
+/* Session item styles */
+.session-item {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    border-radius: var(--radius);
+    background-color: white;
+    margin-bottom: 8px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+.session-item:hover {
+    background-color: var(--secondary-hover);
+}
+
+.session-item:last-child {
+    margin-bottom: 0;
+}
+
+.session-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.session-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.session-date {
+    font-size: 0.75rem;
+    color: var(--light-text);
+}
+
+.session-tabs-count {
+    font-size: 0.75rem;
+    color: var(--light-text);
+}
+
+.session-tabs-preview {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+    overflow-x: hidden;
+}
+
+.preview-favicon {
+    width: 16px;
+    height: 16px;
+}
+
+.expand-button {
+    background: none;
+    border: none;
+    font-size: 0.75rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 4px 0;
+    text-align: left;
+}
+
+.session-tabs-expanded {
+    margin-top: 8px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 8px;
+    display: none;
+}
+
+.session-tabs-expanded.show {
+    display: block;
+}
+
 /* Icon styles removed */
 
-.tab-list {
+.tab-list,
+.sessions-list {
     background-color: var(--secondary-color);
     border-radius: var(--radius);
     padding: 12px;
@@ -233,6 +317,7 @@ button:hover {
     margin: 8px 0;
 }
 
-.session-info {
+.session-info,
+.saved-sessions {
     margin-top: 16px;
 }

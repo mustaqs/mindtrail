@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const sessionDate = document.getElementById('session-date');
     const sessionTabsCount = document.getElementById('session-tabs-count');
     const sessionTabsList = document.getElementById('session-tabs-list');
-    const sessionSummaryContent = document.getElementById('session-summary-content');
+    const sessionContext = document.getElementById('session-context');
+    const sessionContextContent = document.getElementById('session-context-content');
     const backButton = document.getElementById('back-button');
     const restoreSessionButton = document.getElementById('restore-session');
     const deleteSessionButton = document.getElementById('delete-session');
@@ -143,24 +144,12 @@ document.addEventListener('DOMContentLoaded', () => {
             sessionTabsList.appendChild(tabElement);
         });
         
-        // Show AI summary if available, otherwise show placeholder
-        if (session.summary) {
-            sessionSummaryContent.innerHTML = `<p>${session.summary}</p>`;
+        // Display context if available
+        if (session.context && session.context.trim() !== '') {
+            sessionContextContent.textContent = session.context;
+            sessionContext.classList.remove('hidden');
         } else {
-            sessionSummaryContent.innerHTML = `
-                <p class="placeholder-text">AI summary will be generated soon. This feature uses AI to analyze and summarize the content of your tabs.</p>
-                <button id="generate-summary" class="secondary-btn" style="margin-top: 12px;">
-                    <span class="icon">🤖</span> Generate Summary
-                </button>
-            `;
-            
-            // Add event listener to generate summary button
-            const generateSummaryButton = document.getElementById('generate-summary');
-            if (generateSummaryButton) {
-                generateSummaryButton.addEventListener('click', () => {
-                    generateAISummary(session);
-                });
-            }
+            sessionContext.classList.add('hidden');
         }
         
         // Hide sessions list and show details
@@ -185,15 +174,15 @@ document.addEventListener('DOMContentLoaded', () => {
             { action: 'restoreSession', sessionId: currentSession.id },
             (response) => {
                 if (response.success) {
-                    restoreSessionButton.textContent = '✅ Session Restored!';
+                    restoreSessionButton.textContent = 'Session Restored!';
                 } else {
-                    restoreSessionButton.textContent = '❌ Error: ' + (response.error || 'Unknown error');
+                    restoreSessionButton.textContent = 'Error: ' + (response.error || 'Unknown error');
                 }
                 
                 setTimeout(() => {
-                    restoreSessionButton.innerHTML = '<span class="icon">🔄</span> Restore Session';
+                    restoreSessionButton.textContent = 'Restore Session';
                     restoreSessionButton.disabled = false;
-                }, 2000);
+                }, 1500);
             }
         );
     }
@@ -229,63 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function generateAISummary(session) {
-        // In a real implementation, this would call an AI service API
-        // For this prototype, we'll simulate an AI summary
-        
-        const summaryElement = document.getElementById('session-summary-content');
-        summaryElement.innerHTML = '<p class="placeholder-text">Generating summary...</p>';
-        
-        // Simulate API call delay
-        setTimeout(() => {
-            // Create a simple summary based on tab titles
-            const topics = extractTopics(session.tabs);
-            const summary = `This session contains ${session.tabs.length} tabs focused on ${topics.join(', ')}. The main topics appear to be research and learning about these subjects.`;
-            
-            // Update UI
-            summaryElement.innerHTML = `<p>${summary}</p>`;
-            
-            // Save summary to session
-            chrome.storage.local.get('sessions', (data) => {
-                const sessions = data.sessions || [];
-                const updatedSessions = sessions.map(s => {
-                    if (s.id === session.id) {
-                        return { ...s, summary };
-                    }
-                    return s;
-                });
-                
-                chrome.storage.local.set({ sessions: updatedSessions });
-                
-                // Update current session
-                currentSession.summary = summary;
-            });
-        }, 2000);
-    }
-
-    function extractTopics(tabs) {
-        // Simple topic extraction from tab titles
-        // In a real implementation, this would use NLP or an AI service
-        
-        // Get all words from tab titles
-        const words = tabs
-            .map(tab => tab.title.split(' '))
-            .flat()
-            .map(word => word.toLowerCase())
-            .filter(word => word.length > 3)
-            .filter(word => !['http', 'https', 'www', 'com', 'org', 'the', 'and', 'that', 'this', 'with', 'for'].includes(word));
-        
-        // Count word frequency
-        const wordCounts = {};
-        words.forEach(word => {
-            wordCounts[word] = (wordCounts[word] || 0) + 1;
-        });
-        
-        // Sort by frequency
-        const sortedWords = Object.entries(wordCounts)
-            .sort((a, b) => b[1] - a[1])
-            .map(entry => entry[0]);
-        
-        // Return top 3 words as topics
-        return sortedWords.slice(0, 3);
+        // AI summary functionality has been removed
     }
 });
