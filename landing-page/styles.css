@@ -130,6 +130,27 @@ body::-webkit-scrollbar-thumb:hover {
     align-items: center;
 }
 
+.banner-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.banner-link {
+    color: var(--dark-text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    padding: 5px 10px;
+    border-radius: var(--radius);
+}
+
+.banner-link:hover {
+    color: var(--accent-blue);
+    transform: translateY(-1px);
+}
+
 .banner-button {
     background-color: var(--accent-blue);
     color: white;
@@ -204,6 +225,14 @@ p {
     line-height: 1.75;
 }
 
+.cta-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
 .cta-button {
     background-color: var(--accent-blue);
     color: var(--dark-text);
@@ -221,6 +250,17 @@ p {
     overflow: hidden;
     letter-spacing: 0.01em;
     margin-top: 12px;
+}
+
+.primary-cta {
+    background-color: var(--accent-blue);
+    color: var(--dark-text);
+}
+
+.secondary-cta {
+    background-color: transparent;
+    color: var(--dark-text);
+    border: 1px solid var(--accent-blue);
 }
 
 .cta-button:hover {
@@ -252,6 +292,45 @@ p {
     text-align: center;
     padding: 30px;
     margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--accent-blue), #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.section-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: var(--dark-text);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-subsubtitle {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--dark-text);
+}
+
+.section-subdescription {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: var(--dark-secondary-text);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .glass-card {
@@ -637,6 +716,7 @@ p {
     display: flex;
     max-width: 500px;
     margin: 2rem auto;
+    height: 50px; /* Set a fixed height for the form */
 }
 
 .email-form input {
@@ -645,6 +725,8 @@ p {
     border: 1px solid var(--border-color);
     border-radius: var(--radius) 0 0 var(--radius);
     font-size: 1rem;
+    height: 100%;
+    box-sizing: border-box;
 }
 
 .dark-mode .email-form input {
@@ -655,6 +737,13 @@ p {
 
 .email-form .cta-button {
     border-radius: 0 var(--radius) var(--radius) 0;
+    height: 100%;
+    margin-top: 0;
+    padding: 0 36px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .subtext {
@@ -662,12 +751,38 @@ p {
     color: var(--light-text);
 }
 
+.success-message {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: var(--dark-text);
+    padding: 16px;
+    border-radius: var(--radius);
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 500;
+    border-left: 4px solid var(--accent-blue);
+    box-shadow: var(--glass-shadow);
+}
+
+.error-message {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: var(--dark-text);
+    padding: 16px;
+    border-radius: var(--radius);
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 500;
+    border-left: 4px solid #ef4444;
+    box-shadow: var(--glass-shadow);
+}
+
 /* Final CTA Section */
 .final-cta {
     text-align: center;
     padding: calc(var(--section-padding) * 0.8) 0;
-    background: rgba(20, 20, 20, 0.5);
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.5), rgba(30, 30, 30, 0.7));
     color: var(--dark-text);
+    position: relative;
+    overflow: hidden;
 }
 
 .dark-mode .final-cta {
@@ -677,14 +792,36 @@ p {
 }
 
 .final-cta h2 {
-    color: var(--dark-text);
-    margin-bottom: calc(var(--vertical-rhythm) * 1.5);
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    background: linear-gradient(90deg, var(--accent-blue), #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 10px rgba(99, 102, 241, 0.2);
 }
 
-.final-cta .cta-button {
-    background-color: var(--glass-bg);
+.final-cta .section-content {
+    padding: 50px 30px;
+    max-width: 800px;
+}
+
+.final-cta .primary-cta {
+    background-color: var(--accent-blue);
     color: var(--dark-text);
-    border: 1px solid var(--glass-border);
+    border: none;
+    box-shadow: 0 4px 20px rgba(58, 134, 255, 0.3);
+    font-weight: 700;
+    padding: 20px 40px;
+    font-size: 1.2rem;
+}
+
+.final-cta .secondary-cta {
+    background-color: transparent;
+    color: var(--dark-text);
+    border: 1px solid var(--accent-blue);
     box-shadow: var(--glass-shadow);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);

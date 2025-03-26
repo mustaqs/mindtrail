@@ -6,6 +6,7 @@
     <title>Mindtrail - Smart Tab Management</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="message-styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,8 +16,13 @@
     <!-- Top Banner -->
     <div class="top-banner">
         <div class="banner-content">
-            <span>🚀 Mindtrail is coming soon!</span>
-            <a href="#waitlist" class="banner-button">Join Waitlist</a>
+            <span>🚀 Mindtrail is Live!</span>
+            <div class="banner-nav">
+                <a href="#features" class="banner-link">Features</a>
+                <a href="#demo" class="banner-link">Demo</a>
+                <a href="#" id="try-mindtrail-banner" class="banner-link">Try Mindtrail</a>
+                <a href="#waitlist" class="banner-button">Join AI Waitlist</a>
+            </div>
         </div>
     </div>
     
@@ -38,7 +44,7 @@
         </section>
 
         <!-- SECTION 2: Features Section -->
-        <section class="features">
+        <section class="features" id="features">
             <div class="section-content glass-card">
                 <h2 class="section-title">Stay Organized While You Think and Learn</h2>
                 <p class="section-description">
@@ -124,14 +130,14 @@
                 </div>
                 
                 <div class="cta-container">
-                    <a href="#" class="cta-button primary-cta">Try Chrome Extension</a>
+                    <a href="#" class="cta-button primary-cta" id="try-mindtrail-features">Try Mindtrail</a>
                     <a href="#waitlist" class="cta-button secondary-cta">Join AI Waitlist</a>
                 </div>
             </div>
         </section>
 
         <!-- SECTION 3: Demo -->
-        <section class="demo">
+        <section class="demo" id="demo">
             <div class="section-content glass-card">
                 <h2>✨ See It in Action</h2>
                 <div class="demo-placeholder">
@@ -146,17 +152,19 @@
         <!-- SECTION 4: Waitlist / Email Capture -->
         <section class="waitlist" id="waitlist">
             <div class="section-content glass-card">
-                <h2>✅ Join the Waitlist</h2>
-                <p class="body-text">
-                    We're building this tool for people who think deeply, research obsessively, and hate tab chaos.
+                <h2 class="section-title">🚀 Mindtrail is Live</h2>
+                <p class="section-subtitle">
+                    Start organizing your research sessions with ease — save tabs, add context, and pick up where you left off.
                 </p>
-                <p class="body-text">
-                    Want early access? Sign up below — we'll invite you to test it soon and help shape its future.
+                <h3 class="section-subsubtitle">🧠 Want early access to the AI features?</h3>
+                <p class="section-subdescription">
+                    Sign up for the waitlist and be the first to try auto-summarization, topic grouping, and smart search.
                 </p>
-                <div class="email-form">
-                    <input type="email" placeholder="Your email" required class="email-input">
-                    <button class="cta-button">👉 Get Early Access</button>
-                </div>
+                <form class="email-form" id="waitlist-form">
+                    <input type="email" placeholder="Your email" required class="email-input" id="email-input">
+                    <button type="submit" class="cta-button" id="submit-button">Get Early Access</button>
+                </form>
+                <div id="form-message" class="form-message" style="display: none;"></div>
                 <p class="subtext">No spam. Just the occasional update and invite to try it before the world does.</p>
             </div>
         </section>
@@ -176,7 +184,10 @@
         <section class="final-cta">
             <div class="section-content glass-card">
                 <h2>Ready to stop drowning in tabs?</h2>
-                <a href="#waitlist" class="cta-button">Join the waitlist and be first to try it</a>
+                <div class="cta-container">
+                    <a href="#" class="cta-button primary-cta" id="download-extension">Download Mindtrail</a>
+                    <a href="#waitlist" class="cta-button secondary-cta">Join AI Waitlist</a>
+                </div>
             </div>
         </section>
 
@@ -185,7 +196,7 @@
         </footer>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
     <script>
         // Initialize Lucide icons
         document.addEventListener('DOMContentLoaded', () => {

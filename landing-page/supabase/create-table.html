@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Waitlist Table in Supabase</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: #f5f5f5;
+        }
+        h1 {
+            color: #3a86ff;
+            margin-bottom: 30px;
+        }
+        pre {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        button {
+            background-color: #3a86ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #2a76ef;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: rgba(39, 174, 96, 0.2);
+            border-left: 4px solid #27ae60;
+        }
+        .error {
+            background-color: rgba(231, 76, 60, 0.2);
+            border-left: 4px solid #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <h1>Create Waitlist Table in Supabase</h1>
+    
+    <p>This tool will create the waitlist table in your Supabase project using the SQL from <code>waitlist-table.sql</code>.</p>
+    
+    <h2>SQL to Execute:</h2>
+    <pre id="sql-content">Loading SQL content...</pre>
+    
+    <button id="execute-sql">Create Table in Supabase</button>
+    
+    <div id="result" class="result" style="display: none;"></div>
+    
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+        
+        // Supabase configuration
+        const supabaseUrl = 'https://vwvolbwgkrswilswvdnj.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3dm9sYndna3Jzd2lsc3d2ZG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwMDA1ODAsImV4cCI6MjA1ODU3NjU4MH0.fSNmIR4vcXIP3Z7c97HQrOyLmu5nhmYVQpNlwOmqe-4';
+        
+        // Initialize the Supabase client
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        
+        // Load SQL content
+        async function loadSqlContent() {
+            try {
+                const response = await fetch('../supabase/waitlist-table.sql');
+                const sqlContent = await response.text();
+                document.getElementById('sql-content').textContent = sqlContent;
+            } catch (error) {
+                document.getElementById('sql-content').textContent = 'Error loading SQL: ' + error.message;
+            }
+        }
+        
+        // Execute SQL
+        async function executeSql() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'result';
+            resultDiv.style.display = 'block';
+            
+            try {
+                const sqlContent = document.getElementById('sql-content').textContent;
+                
+                // Execute the SQL
+                const { data, error } = await supabase.rpc('exec_sql', { sql: sqlContent });
+                
+                if (error) throw error;
+                
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = '<h3>Success!</h3><p>The waitlist table has been created successfully.</p>';
+                
+                // Check if table exists
+                const { data: tables, error: tableError } = await supabase
+                    .from('information_schema.tables')
+                    .select('table_name')
+                    .eq('table_name', 'waitlist');
+                
+                if (tableError) {
+                    resultDiv.innerHTML += '<p>Could not verify table creation: ' + tableError.message + '</p>';
+                } else {
+                    if (tables && tables.length > 0) {
+                        resultDiv.innerHTML += '<p>Verified: Table "waitlist" exists in the database.</p>';
+                    } else {
+                        resultDiv.innerHTML += '<p>Warning: Could not verify that table "waitlist" exists.</p>';
+                    }
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '<h3>Error</h3><p>' + error.message + '</p>';
+                
+                // If the error is about permissions, provide guidance
+                if (error.message.includes('permission') || error.message.includes('rpc')) {
+                    resultDiv.innerHTML += `
+                        <p>It looks like you might not have permission to execute SQL or the RPC function doesn't exist.</p>
+                        <p>Please go to your Supabase dashboard and run the SQL manually:</p>
+                        <ol>
+                            <li>Go to <a href="https://app.supabase.com" target="_blank" style="color: #3a86ff;">Supabase Dashboard</a></li>
+                            <li>Select your project</li>
+                            <li>Go to the SQL Editor</li>
+                            <li>Create a new query</li>
+                            <li>Paste the SQL content shown above</li>
+                            <li>Run the query</li>
+                        </ol>
+                    `;
+                }
+            }
+        }
+        
+        // Set up event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSqlContent();
+            
+            document.getElementById('execute-sql').addEventListener('click', executeSql);
+        });
+    </script>
+</body>
+</html>
