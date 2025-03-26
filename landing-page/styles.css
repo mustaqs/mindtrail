@@ -1328,6 +1328,7 @@ footer, .glass-footer {
     
     .banner-content span {
         font-size: 0.9rem;
+        white-space: nowrap;
     }
     
     .mobile-menu-toggle i {
@@ -2356,5 +2357,28 @@ footer, .glass-footer {
     
     .section-content {
         padding: 20px;
+    }
+}
+
+/* Image optimization */
+.carousel-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: contain;
+    will-change: transform; /* Hardware acceleration hint */
+    backface-visibility: hidden; /* Reduces paint during animations */
+    transform: translateZ(0); /* Force GPU acceleration */
+}
+
+@media (max-width: 768px) {
+    .carousel-image {
+        max-height: 350px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-image {
+        max-height: 300px;
     }
 }
