@@ -135,8 +135,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Create favicon
             const favicon = document.createElement('img');
             favicon.className = 'tab-favicon';
-            favicon.src = tab.favIconUrl || 'icons/default-favicon.png';
-            favicon.onerror = () => { favicon.src = 'icons/default-favicon.png'; };
+            
+            // Only add favicon if it exists
+            if (tab.favIconUrl) {
+                favicon.src = tab.favIconUrl;
+                favicon.onerror = () => { favicon.style.display = 'none'; };
+            } else {
+                favicon.style.display = 'none';
+            }
             
             // Create title
             const title = document.createElement('span');

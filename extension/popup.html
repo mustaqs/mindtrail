@@ -12,10 +12,7 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Mindtrail</h1>
-            <p>Thinking Assistant</p>
-        </header>
+        <h1 class="app-title">Mindtrail</h1>
 
         <div class="tab-stats">
             <div class="stat">
@@ -28,30 +25,55 @@
             </div>
         </div>
 
-        <div class="session-form">
-            <div class="form-group">
-                <label for="session-name">Session Name (optional)</label>
-                <input type="text" id="session-name" placeholder="e.g., Research Project or Work Tabs">
-            </div>
-            <div class="form-group">
-                <label for="session-context">Context (optional)</label>
-                <textarea id="session-context" placeholder="Add notes about this session..."></textarea>
-            </div>
-            <div class="form-group checkbox-group">
-                <input type="checkbox" id="close-tabs" class="checkbox">
-                <label for="close-tabs">Close tabs after saving</label>
-            </div>
-        </div>
-        
         <div class="actions">
-            <button id="save-session" class="primary-btn">
-                Save Current Session
+            <button id="save-tabs" class="primary-btn">
+                Save Tabs
             </button>
             <button id="view-sessions" class="secondary-btn">
                 View Saved Sessions
             </button>
         </div>
-
+        
+        <div class="form-group checkbox-group">
+            <input type="checkbox" id="close-tabs" class="checkbox">
+            <label for="close-tabs">Close tabs after saving</label>
+        </div>
+        
+        <!-- Save Tabs Modal -->
+        <div id="save-tabs-modal" class="modal">
+            <div class="modal-content glass-card">
+                <div class="modal-header">
+                    <h3>Save Tabs</h3>
+                    <button id="close-modal" class="close-btn">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="session-form">
+                        <div class="form-group">
+                            <label for="session-name">Session Name (optional)</label>
+                            <input type="text" id="session-name" placeholder="e.g., Research Project or Work Tabs">
+                        </div>
+                        <div class="form-group">
+                            <label for="session-context">Context (optional)</label>
+                            <textarea id="session-context" placeholder="Add notes about this session..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="select-actions">
+                        <button id="select-all" class="small-btn">Select All</button>
+                        <button id="deselect-all" class="small-btn">Deselect All</button>
+                    </div>
+                    
+                    <div id="selectable-tabs" class="selectable-tabs">
+                        <!-- Tabs will be added here dynamically -->
+                        <p class="empty-state">Loading your tabs...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="save-selected-tabs" class="primary-btn">Save Selected Tabs</button>
+                </div>
+            </div>
+        </div>
+        
         <div class="session-info">
             <h2>Current Session</h2>
             <div id="current-session-tabs" class="tab-list">

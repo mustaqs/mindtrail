@@ -79,16 +79,13 @@ body.loaded {
     padding: 16px;
 }
 
-header {
+.app-title {
     text-align: center;
     margin-bottom: 24px;
-    padding: 16px 0;
-    background-color: var(--glass-bg-dark);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: var(--radius);
-    box-shadow: var(--glass-shadow);
-    border: 1px solid var(--glass-border);
+    padding: 8px 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-color);
 }
 
 h1 {
@@ -96,6 +93,10 @@ h1 {
     font-weight: 700;
     margin-bottom: 4px;
     color: var(--text-color);
+}
+
+.app-title {
+    font-size: 1.8rem;
 }
 
 h2 {
@@ -138,12 +139,15 @@ p {
 }
 
 .session-form {
-    margin-bottom: 16px;
     background-color: var(--glass-bg);
     border-radius: var(--radius);
     padding: 16px;
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
+}
+
+.container > .session-form {
+    margin-bottom: 16px;
 }
 
 .form-group {
@@ -212,6 +216,152 @@ input[type="text"]::placeholder, textarea::placeholder {
     flex-direction: column;
     gap: 8px;
     margin-bottom: 16px;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--glass-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--glass-border);
+    width: 90%;
+    max-width: 320px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-body {
+    padding: 15px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+
+
+.modal-footer {
+    padding: 15px;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.select-actions {
+    display: flex;
+    justify-content: space-between;
+    margin: 16px 0;
+}
+
+
+
+.small-btn {
+    background-color: var(--glass-bg-dark);
+    color: var(--text-color);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.small-btn:hover {
+    background-color: var(--accent-blue);
+}
+
+.selectable-tabs {
+    max-height: 250px;
+    overflow-y: auto;
+    margin: 16px 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary-hover) var(--glass-bg-dark);
+    background-color: var(--glass-bg-dark);
+    border-radius: var(--radius);
+    padding: 8px;
+}
+
+.selectable-tabs::-webkit-scrollbar {
+    width: 6px;
+}
+
+.selectable-tabs::-webkit-scrollbar-track {
+    background: var(--glass-bg-dark);
+}
+
+.selectable-tabs::-webkit-scrollbar-thumb {
+    background-color: var(--secondary-hover);
+    border-radius: 3px;
+}
+
+.selectable-tab-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    margin-bottom: 5px;
+    background-color: var(--glass-bg-dark);
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.selectable-tab-item:hover {
+    background-color: rgba(40, 40, 40, 0.9);
+}
+
+.selectable-tab-item.selected {
+    background-color: rgba(58, 134, 255, 0.2);
+    border-color: var(--accent-blue);
+}
+
+.tab-checkbox {
+    margin-right: 10px;
+    accent-color: var(--accent-blue);
 }
 
 button {

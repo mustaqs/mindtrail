@@ -13,10 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const sessionNameInput = document.getElementById('session-name');
         const sessionContextInput = document.getElementById('session-context');
         const closeTabsCheckbox = document.getElementById('close-tabs');
-        const saveSessionButton = document.getElementById('save-session');
+        const saveTabsButton = document.getElementById('save-tabs');
         const viewSessionsButton = document.getElementById('view-sessions');
         const currentSessionTabsElement = document.getElementById('current-session-tabs');
         const savedSessionsListElement = document.getElementById('saved-sessions-list');
+        
+        // Save tabs modal elements
+        const saveTabsModal = document.getElementById('save-tabs-modal');
+        const closeModalButton = document.getElementById('close-modal');
+        const selectAllButton = document.getElementById('select-all');
+        const deselectAllButton = document.getElementById('deselect-all');
+        const selectableTabsContainer = document.getElementById('selectable-tabs');
+        const saveSelectedTabsButton = document.getElementById('save-selected-tabs');
         
         // This helper function is not used anywhere, removing it for optimization
         
@@ -28,42 +36,61 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Get current tabs - optimized query
-        chrome.tabs.query({ currentWindow: true }, (tabs) => {
-            // Update tab count
-            tabCountElement.textContent = tabs.length;
-
-            // Clear and display tabs with minimal DOM operations
-            currentSessionTabsElement.textContent = '';
+        let currentTabs = [];
+        
+        function loadCurrentTabs() {
+            chrome.tabs.query({ currentWindow: true }, (tabs) => {
+                // Store tabs for later use
+                currentTabs = tabs;
                 
-            if (tabs.length > 0) {
-                // Create document fragment for better performance
-                const fragment = document.createDocumentFragment();
+                // Update tab count
+                tabCountElement.textContent = tabs.length;
                 
-                tabs.forEach(tab => {
-                    const tabElement = document.createElement('div');
-                    tabElement.className = 'tab-item';
+                // Clear and display tabs with minimal DOM operations
+                if (currentSessionTabsElement) {
+                    currentSessionTabsElement.textContent = '';
                     
-                    const favicon = document.createElement('img');
-                    favicon.className = 'tab-favicon';
-                    favicon.src = tab.favIconUrl || 'icons/default-favicon.png';
-                    
-                    const title = document.createElement('span');
-                    title.className = 'tab-title';
-                    title.textContent = tab.title;
-                    
-                    tabElement.appendChild(favicon);
-                    tabElement.appendChild(title);
-                    fragment.appendChild(tabElement);
-                });
-                
-                currentSessionTabsElement.appendChild(fragment);
-            } else {
-                const emptyState = document.createElement('p');
-                emptyState.className = 'empty-state';
-                emptyState.textContent = 'No tabs open in this window';
-                currentSessionTabsElement.appendChild(emptyState);
-            }
-        });
+                    if (tabs.length > 0) {
+                        // Create document fragment for better performance
+                        const fragment = document.createDocumentFragment();
+                        
+                        tabs.forEach(tab => {
+                            const tabElement = document.createElement('div');
+                            tabElement.className = 'tab-item';
+                            
+                            const favicon = document.createElement('img');
+                            favicon.className = 'tab-favicon';
+                            
+                            // Only add favicon if it exists
+                            if (tab.favIconUrl) {
+                                favicon.src = tab.favIconUrl;
+                                favicon.onerror = () => { favicon.style.display = 'none'; };
+                            } else {
+                                favicon.style.display = 'none';
+                            }
+                            
+                            const title = document.createElement('span');
+                            title.className = 'tab-title';
+                            title.textContent = tab.title;
+                            
+                            tabElement.appendChild(favicon);
+                            tabElement.appendChild(title);
+                            fragment.appendChild(tabElement);
+                        });
+                        
+                        currentSessionTabsElement.appendChild(fragment);
+                    } else {
+                        const emptyState = document.createElement('p');
+                        emptyState.className = 'empty-state';
+                        emptyState.textContent = 'No tabs open in this window';
+                        currentSessionTabsElement.appendChild(emptyState);
+                    }
+                }
+            });
+        }
+        
+        // Load tabs initially
+        loadCurrentTabs();
 
         // Get saved sessions and display them
         loadSavedSessions();
@@ -149,11 +176,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add up to 5 favicons
             const previewTabs = session.tabs.slice(0, 5);
             previewTabs.forEach(tab => {
-                const favicon = document.createElement('img');
-                favicon.className = 'preview-favicon';
-                favicon.src = tab.favIconUrl || 'icons/default-favicon.png';
-                favicon.onerror = () => { favicon.src = 'icons/default-favicon.png'; };
-                previewElement.appendChild(favicon);
+                // Only add favicon if it exists
+                if (tab.favIconUrl) {
+                    const favicon = document.createElement('img');
+                    favicon.className = 'preview-favicon';
+                    favicon.src = tab.favIconUrl;
+                    favicon.onerror = () => { favicon.style.display = 'none'; };
+                    previewElement.appendChild(favicon);
+                }
             });
             
             // Create expand button
@@ -183,7 +213,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const favicon = document.createElement('img');
                 favicon.className = 'tab-favicon';
-                favicon.src = tab.favIconUrl || 'icons/default-favicon.png';
+                
+                // Only add favicon if it exists
+                if (tab.favIconUrl) {
+                    favicon.src = tab.favIconUrl;
+                    favicon.onerror = () => { favicon.style.display = 'none'; };
+                } else {
+                    favicon.style.display = 'none';
+                }
                 
                 const title = document.createElement('span');
                 title.className = 'tab-title';
@@ -225,78 +262,202 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Save current session
-        saveSessionButton.addEventListener('click', () => {
+        // Function to save tabs (either all or selected)
+        function saveTabs(tabsToSave, customName = '', context = '') {
             try {
-                // Disable the button to prevent multiple clicks
-                saveSessionButton.disabled = true;
-                saveSessionButton.textContent = 'Saving...';
-        
-                // Query tabs in the current window
-                chrome.tabs.query({ currentWindow: true }, (tabs) => {
-                    // Get the custom name or use a default timestamp-based name
-                    const customName = sessionNameInput.value.trim();
-                    const context = sessionContextInput.value.trim();
-                    const defaultName = `Session ${new Date().toLocaleString()}`;
-                    
-                    const session = {
-                        id: Date.now(),
-                        date: new Date().toISOString(),
-                        name: customName || defaultName,
-                        context: context || '',
-                        tabs: tabs.map(tab => ({
-                            title: tab.title,
-                            url: tab.url,
-                            favIconUrl: tab.favIconUrl
-                        })),
-                        tabCount: tabs.length
-                    };
+                // Use provided name/context or default
+                const defaultName = `Session ${new Date().toLocaleString()}`;
+                
+                const session = {
+                    id: Date.now(),
+                    date: new Date().toISOString(),
+                    name: customName || defaultName,
+                    context: context || '',
+                    tabs: tabsToSave.map(tab => ({
+                        title: tab.title,
+                        url: tab.url,
+                        favIconUrl: tab.favIconUrl
+                    })),
+                    tabCount: tabsToSave.length
+                };
 
-                    // Save to storage
-                    chrome.storage.local.get('sessions', (data) => {
-                        const sessions = data.sessions || [];
-                        sessions.push(session);
+                // Save to storage
+                chrome.storage.local.get('sessions', (data) => {
+                    const sessions = data.sessions || [];
+                    sessions.push(session);
+                    
+                    chrome.storage.local.set({ sessions }, () => {
+                        // Update session count
+                        sessionCountElement.textContent = sessions.length;
                         
-                        chrome.storage.local.set({ sessions }, () => {
-                            // Update session count
-                            sessionCountElement.textContent = sessions.length;
-                            
-                            // Clear the session name and context inputs
-                            sessionNameInput.value = '';
-                            sessionContextInput.value = '';
-                            
-                            // Show success message
-                            saveSessionButton.textContent = 'Saved!';
-                            
-                            // Reload saved sessions display
-                            loadSavedSessions();
-                            
-                            setTimeout(() => {
-                                saveSessionButton.textContent = 'Save Current Session';
-                                saveSessionButton.disabled = false;
-                            }, 1500);
-                            
-                            // Close tabs if option is checked
-                            if (closeTabsCheckbox.checked && tabs.length > 0) {
-                                const tabIds = tabs.map(tab => tab.id);
-                                chrome.tabs.remove(tabIds);
-                            }
-                        });
+                        // Reload saved sessions display
+                        loadSavedSessions();
+                        
+                        // Close tabs if option is checked
+                        if (closeTabsCheckbox.checked && tabsToSave.length > 0) {
+                            const tabIds = tabsToSave.map(tab => tab.id);
+                            chrome.tabs.remove(tabIds);
+                        }
                     });
                 });
             } catch (error) {
-                console.error('Error:', error);
-                saveSessionButton.textContent = 'Error';
-                setTimeout(() => {
-                    saveSessionButton.textContent = 'Save Current Session';
-                    saveSessionButton.disabled = false;
-                }, 1500);
+                console.error('Error saving tabs:', error);
             }
+        }
+        
+        // Open save tabs modal
+        saveTabsButton.addEventListener('click', () => {
+            // Clear previous inputs
+            sessionNameInput.value = '';
+            sessionContextInput.value = '';
+            
+            // Clear previous selections
+            selectedTabs.clear();
+            
+            // Refresh tabs list
+            loadTabsForSelection();
+            
+            // Show modal
+            saveTabsModal.classList.add('show');
+        });
+        
+        // Close modal
+        closeModalButton.addEventListener('click', () => {
+            saveTabsModal.classList.remove('show');
         });
 
         // View saved sessions - simplified
         viewSessionsButton.addEventListener('click', () => {
             chrome.tabs.create({ url: 'sessions.html' });
+        });
+        
+        // Tab selection functionality
+        let selectedTabs = new Set();
+        
+        // Select all tabs
+        selectAllButton.addEventListener('click', () => {
+            const checkboxes = selectableTabsContainer.querySelectorAll('.tab-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+                const tabId = parseInt(checkbox.dataset.tabId);
+                selectedTabs.add(tabId);
+                checkbox.closest('.selectable-tab-item').classList.add('selected');
+            });
+        });
+        
+        // Deselect all tabs
+        deselectAllButton.addEventListener('click', () => {
+            const checkboxes = selectableTabsContainer.querySelectorAll('.tab-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.closest('.selectable-tab-item').classList.remove('selected');
+            });
+            selectedTabs.clear();
+        });
+        
+        // Load tabs for selection
+        function loadTabsForSelection() {
+            selectableTabsContainer.innerHTML = '';
+            
+            chrome.tabs.query({ currentWindow: true }, (tabs) => {
+                if (tabs.length === 0) {
+                    selectableTabsContainer.innerHTML = '<p class="empty-state">No tabs open in this window</p>';
+                    return;
+                }
+                
+                const fragment = document.createDocumentFragment();
+                
+                tabs.forEach(tab => {
+                    const tabElement = document.createElement('div');
+                    tabElement.className = 'selectable-tab-item';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'tab-checkbox';
+                    checkbox.dataset.tabId = tab.id;
+                    
+                    const favicon = document.createElement('img');
+                    favicon.className = 'tab-favicon';
+                    
+                    // Only add favicon if it exists
+                    if (tab.favIconUrl) {
+                        favicon.src = tab.favIconUrl;
+                        favicon.onerror = () => { favicon.style.display = 'none'; };
+                    } else {
+                        favicon.style.display = 'none';
+                    }
+                    
+                    const title = document.createElement('span');
+                    title.className = 'tab-title';
+                    title.textContent = tab.title;
+                    
+                    // Handle checkbox change
+                    checkbox.addEventListener('change', () => {
+                        const tabId = parseInt(checkbox.dataset.tabId);
+                        if (checkbox.checked) {
+                            selectedTabs.add(tabId);
+                            tabElement.classList.add('selected');
+                        } else {
+                            selectedTabs.delete(tabId);
+                            tabElement.classList.remove('selected');
+                        }
+                    });
+                    
+                    // Make the whole item clickable
+                    tabElement.addEventListener('click', (e) => {
+                        if (e.target !== checkbox) {
+                            checkbox.checked = !checkbox.checked;
+                            const event = new Event('change');
+                            checkbox.dispatchEvent(event);
+                        }
+                    });
+                    
+                    tabElement.appendChild(checkbox);
+                    tabElement.appendChild(favicon);
+                    tabElement.appendChild(title);
+                    fragment.appendChild(tabElement);
+                });
+                
+                selectableTabsContainer.appendChild(fragment);
+            });
+        }
+        
+        // Save selected tabs
+        saveSelectedTabsButton.addEventListener('click', () => {
+            if (selectedTabs.size === 0) {
+                alert('Please select at least one tab to save.');
+                return;
+            }
+            
+            saveSelectedTabsButton.disabled = true;
+            saveSelectedTabsButton.textContent = 'Saving...';
+            
+            chrome.tabs.query({ currentWindow: true }, (tabs) => {
+                let tabsToSave = tabs;
+                
+                // If there are selected tabs, filter to only those tabs
+                if (selectedTabs.size > 0) {
+                    tabsToSave = tabs.filter(tab => selectedTabs.has(tab.id));
+                }
+                
+                // Get the session details from the modal
+                const customName = sessionNameInput.value.trim();
+                const context = sessionContextInput.value.trim();
+                
+                saveTabs(tabsToSave, customName, context);
+                
+                // Close modal
+                saveTabsModal.classList.remove('show');
+                
+                // Show success message on the main button
+                saveTabsButton.textContent = 'Saved!';
+                saveSelectedTabsButton.textContent = 'Save Selected Tabs';
+                saveSelectedTabsButton.disabled = false;
+                
+                setTimeout(() => {
+                    saveTabsButton.textContent = 'Save Tabs';
+                }, 1500);
+            });
         });
     } catch (error) {
         console.error('Error:', error);
