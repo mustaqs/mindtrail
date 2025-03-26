@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindtrail - Saved Sessions</title>
+    <link rel="stylesheet" href="sessions.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Mindtrail</h1>
+            <p>Your saved research sessions</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="sessions-header">
+            <h2>Saved Sessions</h2>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search sessions...">
+            </div>
+        </div>
+
+        <div id="sessions-list" class="sessions-list">
+            <!-- Sessions will be loaded here dynamically -->
+            <div class="loading">Loading your sessions...</div>
+        </div>
+
+        <div id="session-details" class="session-details hidden">
+            <div class="session-details-header">
+                <button id="back-button" class="back-button">← Back to sessions</button>
+                <h2 id="session-title">Session Title</h2>
+                <div class="session-meta">
+                    <span id="session-date">Date</span>
+                    <span id="session-tabs-count">0 tabs</span>
+                </div>
+            </div>
+
+            <div class="session-actions">
+                <button id="restore-session" class="primary-btn">
+                    <span class="icon">🔄</span> Restore Session
+                </button>
+                <button id="delete-session" class="danger-btn">
+                    <span class="icon">🗑️</span> Delete Session
+                </button>
+            </div>
+
+            <div class="session-summary">
+                <h3>AI Summary</h3>
+                <div id="session-summary-content" class="summary-content">
+                    <p class="placeholder-text">AI summary will appear here once generated.</p>
+                </div>
+            </div>
+
+            <div class="session-tabs">
+                <h3>Tabs in this session</h3>
+                <div id="session-tabs-list" class="tabs-list">
+                    <!-- Tabs will be loaded here dynamically -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Mindtrail. All rights reserved.</p>
+    </footer>
+
+    <script src="sessions.js"></script>
+</body>
+</html>

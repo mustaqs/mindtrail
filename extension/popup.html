@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindtrail</title>
+    <link rel="stylesheet" href="popup.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- No inline scripts to comply with Content Security Policy -->
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Mindtrail</h1>
+            <p>Thinking Assistant</p>
+        </header>
+
+        <div class="tab-stats">
+            <div class="stat">
+                <span id="tab-count" class="stat-number">0</span>
+                <span class="stat-label">Open Tabs</span>
+            </div>
+            <div class="stat">
+                <span id="session-count" class="stat-number">0</span>
+                <span class="stat-label">Saved Sessions</span>
+            </div>
+        </div>
+
+        <div class="session-form">
+            <div class="form-group">
+                <label for="session-name">Session Name (optional)</label>
+                <input type="text" id="session-name" placeholder="e.g., Research Project or Work Tabs">
+            </div>
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="close-tabs" class="checkbox">
+                <label for="close-tabs">Close tabs after saving</label>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button id="save-session" class="primary-btn">
+                Save Current Session
+            </button>
+            <button id="view-sessions" class="secondary-btn">
+                View Saved Sessions
+            </button>
+        </div>
+
+        <div class="session-info">
+            <h2>Current Session</h2>
+            <div id="current-session-tabs" class="tab-list">
+                <!-- Tab items will be added here dynamically -->
+                <p class="empty-state">Loading your tabs...</p>
+            </div>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>

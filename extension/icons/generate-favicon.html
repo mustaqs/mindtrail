@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate Default Favicon PNG</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    #output {
+      margin-top: 20px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Generate Default Favicon PNG</h1>
+  <p>This tool will convert the SVG favicon to a PNG file.</p>
+  
+  <button id="generate">Generate PNG</button>
+  
+  <div id="output"></div>
+  
+  <script>
+    document.getElementById('generate').addEventListener('click', function() {
+      const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+  <rect width="16" height="16" rx="2" fill="#E2E8F0"/>
+  <path d="M4 4H12V12H4V4Z" fill="#94A3B8"/>
+  <path d="M6 6H10V10H6V6Z" fill="#CBD5E1"/>
+</svg>`;
+      
+      // Create a canvas element
+      const canvas = document.createElement('canvas');
+      canvas.width = 16;
+      canvas.height = 16;
+      document.getElementById('output').appendChild(canvas);
+      
+      // Get the canvas context
+      const ctx = canvas.getContext('2d');
+      
+      // Create an image element
+      const img = new Image();
+      
+      // Set up the onload handler
+      img.onload = function() {
+        // Draw the image on the canvas
+        ctx.drawImage(img, 0, 0);
+        
+        // Convert canvas to data URL
+        const dataUrl = canvas.toDataURL('image/png');
+        
+        // Create a download link
+        const link = document.createElement('a');
+        link.download = 'default-favicon.png';
+        link.href = dataUrl;
+        link.textContent = 'Download default-favicon.png';
+        link.style.display = 'block';
+        link.style.marginTop = '10px';
+        document.getElementById('output').appendChild(link);
+        
+        // Add instructions
+        const instructions = document.createElement('p');
+        instructions.textContent = 'Click the link above to download the PNG file, then place it in the extension/icons directory.';
+        document.getElementById('output').appendChild(instructions);
+      };
+      
+      // Set the image source to the SVG content
+      img.src = 'data:image/svg+xml;base64,' + btoa(svgContent);
+    });
+  </script>
+</body>
+</html>
