@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Now send the welcome email
                 try {
-                    // Send email via fetch API
-                    const response = await fetch('/api/send-welcome-email', {
+                    // Send email via fetch API to the join-waitlist endpoint
+                    const response = await fetch('/api/join-waitlist', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -78,8 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         body: JSON.stringify({ email }),
                     });
                     
+                    const responseData = await response.json();
+                    
                     if (!response.ok) {
-                        throw new Error('Failed to send welcome email');
+                        console.error('API error:', responseData);
+                        throw new Error(responseData.error || 'Failed to process waitlist request');
                     }
                     
                     // Show success message and clear the form
@@ -93,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <div class="text-4xl mb-4">🎉</div>
                                 <h3 class="text-xl font-bold text-white mb-2">You're in!</h3>
                                 <p class="text-white/80">Check your inbox for installation instructions.</p>
+                                <p class="text-white/60 mt-2 text-sm">If you don't see the email, please check your spam folder or contact <a href="mailto:support@mindtrail.xyz" class="text-accent-blue hover:underline">support@mindtrail.xyz</a></p>
                             </div>
                         `;
                     }, 3000);
@@ -100,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } catch (emailError) {
                     console.error('Error sending welcome email:', emailError);
                     // Still show success since the email was added to the database
-                    showMessage('Thanks for signing up! You\'ll receive an email with instructions soon.', 'success');
+                    showMessage('Thanks for signing up! If you don\'t receive an email within a few minutes, please check your spam folder or contact support@mindtrail.xyz', 'info');
                     emailInput.value = '';
                 }
                 
