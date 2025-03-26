@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Mindtrail - Smart Tab Management",
   "version": "0.1.0",
-  "description": "Save, organize, and restore your browser sessions with AI-powered tab management",
+  "description": "Your Thinking Companion for the Web",
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

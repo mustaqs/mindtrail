@@ -39,23 +39,28 @@ body {
     scrollbar-color: var(--secondary-hover) var(--glass-bg-dark);
 }
 
-/* Custom scrollbar for Webkit browsers */
-body::-webkit-scrollbar {
+/* Custom scrollbar for Webkit browsers - apply to all elements */
+::-webkit-scrollbar {
     width: 8px;
+    height: 8px; /* For horizontal scrollbars */
 }
 
-body::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: var(--glass-bg-dark);
 }
 
-body::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background-color: var(--secondary-hover);
     border-radius: 4px;
     border: 2px solid var(--glass-bg-dark);
 }
 
-body::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background-color: var(--light-text);
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--glass-bg-dark);
 }
 
 body::before {
