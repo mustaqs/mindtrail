@@ -84,10 +84,27 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="session-preview">
                 ${faviconPreview}
             </div>
+            <button class="view-tabs-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                View Tabs
+            </button>
         `;
         
         // Add click event to view session details
-        card.addEventListener('click', () => {
+        card.addEventListener('click', (e) => {
+            // Only trigger if not clicking the View Tabs button
+            if (!e.target.closest('.view-tabs-btn')) {
+                viewSessionDetails(session);
+            }
+        });
+        
+        // Add click event for View Tabs button
+        const viewTabsBtn = card.querySelector('.view-tabs-btn');
+        viewTabsBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent card click event
             viewSessionDetails(session);
         });
         

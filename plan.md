@@ -58,3 +58,23 @@
 - [ ] Link "Join Waitlist" in popup or options page
 - [ ] Add feedback form or link to landing page
 - [ ] Set up error logging (console, Sentry optional)
+
+To do:
+
+- add ability for users to select tabs to add to a session (implement next)
+- add intelligent AI features:
+    - add AI summarization
+    - Semantic tab grouping
+    - ai-powered session naming
+    - full text search with semantic ranking
+    - personalized recommendations (future sprint)
+    - daily/weekly digest (future sprint)
+
+    Most of these would be pro features
+
+- mobile app to sync your sessions across devices, instantly allowing you to open sessions on a new device
+
+- security features 
+   - add password protection
+   - add encryption for session data
+   - tool shouldn't save secure webpages like bank accounts
