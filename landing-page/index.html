@@ -261,7 +261,103 @@
         // Initialize Lucide icons
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
+            
+            // Mobile menu toggle
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const bannerNav = document.querySelector('.banner-nav');
+            const body = document.body;
+            
+            if (mobileMenuToggle && bannerNav) {
+                // Toggle menu when hamburger icon is clicked
+                mobileMenuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    bannerNav.classList.toggle('mobile-active');
+                    
+                    // Prevent body scrolling when menu is open
+                    if (bannerNav.classList.contains('mobile-active')) {
+                        body.style.overflow = 'hidden';
+                    } else {
+                        body.style.overflow = '';
+                    }
+                });
+                
+                // Close mobile menu when clicking on a link
+                const navLinks = bannerNav.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        bannerNav.classList.remove('mobile-active');
+                        body.style.overflow = '';
+                    });
+                });
+                
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (bannerNav.classList.contains('mobile-active') && 
+                        !bannerNav.contains(e.target) && 
+                        e.target !== mobileMenuToggle) {
+                        bannerNav.classList.remove('mobile-active');
+                        body.style.overflow = '';
+                    }
+                });
+                
+                // Prevent clicks inside the menu from closing it
+                bannerNav.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+            
+            // Initialize carousel if it exists
+            initCarousel();
         });
+        
+        // Carousel functionality
+        function initCarousel() {
+            const carousel = document.querySelector('.hero-carousel');
+            const items = document.querySelectorAll('.carousel-item');
+            const prevBtn = document.querySelector('.carousel-arrow.prev');
+            const nextBtn = document.querySelector('.carousel-arrow.next');
+            
+            if (!carousel || items.length === 0) return;
+            
+            let currentIndex = 0;
+            const itemCount = items.length;
+            
+            // Handle next button click
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        // On mobile, smooth scroll to next item
+                        const itemWidth = items[0].offsetWidth;
+                        carousel.scrollBy({ left: itemWidth, behavior: 'smooth' });
+                    } else {
+                        // On desktop, use index-based navigation
+                        currentIndex = (currentIndex + 1) % itemCount;
+                        updateCarousel();
+                    }
+                });
+            }
+            
+            // Handle previous button click
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        // On mobile, smooth scroll to previous item
+                        const itemWidth = items[0].offsetWidth;
+                        carousel.scrollBy({ left: -itemWidth, behavior: 'smooth' });
+                    } else {
+                        // On desktop, use index-based navigation
+                        currentIndex = (currentIndex - 1 + itemCount) % itemCount;
+                        updateCarousel();
+                    }
+                });
+            }
+            
+            // Update carousel display based on current index
+            function updateCarousel() {
+                const offset = -currentIndex * 100;
+                carousel.style.transform = `translateX(${offset}%)`;
+            }
+        }
     </script>
 </body>
 </html>
