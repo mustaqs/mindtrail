@@ -187,6 +187,31 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Carousel functionality
     initCarousel();
+    
+    // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const bannerNav = document.querySelector('.banner-nav');
+    
+    if (mobileMenuToggle && bannerNav) {
+        mobileMenuToggle.addEventListener('click', () => {
+            bannerNav.classList.toggle('mobile-active');
+        });
+        
+        // Close mobile menu when clicking on a link
+        const navLinks = bannerNav.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                bannerNav.classList.remove('mobile-active');
+            });
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.banner-content')) {
+                bannerNav.classList.remove('mobile-active');
+            }
+        });
+    }
 });
 
 function initCarousel() {
@@ -272,15 +297,32 @@ function initCarousel() {
     // Handle touch events
     let touchStartX = 0;
     let touchEndX = 0;
+    let isTouching = false;
     
     carousel.addEventListener('touchstart', (e) => {
         touchStartX = e.changedTouches[0].screenX;
+        isTouching = true;
         clearInterval(autoScrollInterval);
     }, { passive: true });
     
+    carousel.addEventListener('touchmove', (e) => {
+        if (!isTouching) return;
+        e.preventDefault(); // Prevent page scrolling while swiping carousel
+        
+        const currentTouch = e.changedTouches[0].screenX;
+        const diff = touchStartX - currentTouch;
+        
+        // Optional: Add visual feedback during swipe
+        // carousel.style.transform = `translateX(${-diff / 4}px)`;
+    }, { passive: false });
+    
     carousel.addEventListener('touchend', (e) => {
         touchEndX = e.changedTouches[0].screenX;
+        isTouching = false;
         handleSwipe();
+        
+        // Reset any transform applied during touch move
+        // carousel.style.transform = '';
         
         autoScrollInterval = setInterval(() => {
             scrollToSlide(currentIndex + 1);
