@@ -30,12 +30,13 @@ body {
     background: radial-gradient(circle at top right, #222222, #111111);
     line-height: 1.6;
     min-height: 100vh;
-    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 body::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -43,12 +44,15 @@ body::before {
     background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDMpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=');
     opacity: 0.4;
     z-index: -1;
+    pointer-events: none;
 }
 
 .container {
+    width: 100%;
     max-width: 900px;
     margin: 0 auto;
     padding: 40px 20px;
+    flex: 1;
 }
 
 header {
@@ -135,12 +139,15 @@ p {
 
 .sessions-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: 1fr;
     gap: 24px;
     margin-bottom: 40px;
-    max-height: calc(100vh - 300px);
-    overflow-y: auto;
-    padding-right: 8px;
+}
+
+@media (min-width: 600px) {
+    .sessions-list {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
 }
 
 .sessions-list::-webkit-scrollbar {
@@ -171,6 +178,9 @@ p {
     cursor: pointer;
     box-shadow: var(--glass-shadow);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .session-card:hover {
@@ -179,18 +189,21 @@ p {
 }
 
 .view-tabs-btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background-color: var(--secondary-color);
     color: var(--text-color);
     border: none;
     border-radius: var(--radius);
-    padding: 8px 12px;
+    padding: 10px 12px;
     font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s ease;
     text-align: center;
     width: 100%;
+    margin-top: auto;
 }
 
 .view-tabs-btn:hover {
@@ -228,6 +241,7 @@ p {
     gap: 8px;
     margin-top: 16px;
     margin-bottom: 16px;
+    flex-grow: 1;
 }
 
 .preview-favicon {
@@ -368,12 +382,13 @@ button {
 }
 
 .footer {
-    margin-top: 40px;
+    width: 100%;
     text-align: center;
     color: var(--light-text);
     font-size: 0.75rem;
     padding: 20px 0;
     border-top: 1px solid var(--border-color);
+    margin-top: auto;
 }
 
 .footer a {
