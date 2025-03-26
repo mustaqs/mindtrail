@@ -24,6 +24,25 @@
     box-sizing: border-box;
 }
 
+/* Global scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--glass-bg-dark);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
 body {
     font-family: 'Inter', 'Poppins', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--text-color);
@@ -106,7 +125,13 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 32px;
+}
+
+.sessions-header h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    letter-spacing: -0.5px;
 }
 
 .search-container {
@@ -155,17 +180,17 @@ p {
 }
 
 .sessions-list::-webkit-scrollbar-track {
-    background: var(--glass-bg);
+    background: var(--glass-bg-dark);
     border-radius: 4px;
 }
 
 .sessions-list::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
 }
 
 .sessions-list::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .session-card {
@@ -296,9 +321,6 @@ p {
 
 .back-button:hover {
     color: var(--text-color);
-}
-
-.back-button:hover {
     text-decoration: underline;
 }
 
@@ -306,6 +328,8 @@ p {
     display: flex;
     gap: 12px;
     margin-bottom: 24px;
+    width: 100%;
+    max-width: 500px;
 }
 
 button {
@@ -320,6 +344,7 @@ button {
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: var(--glass-shadow);
+    text-align: center;
 }
 
 .primary-btn {
@@ -328,6 +353,12 @@ button {
     border: none;
     box-shadow: 0 2px 8px rgba(58, 134, 255, 0.3);
     transition: all 0.2s ease;
+    flex: 1;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .primary-btn:hover {
@@ -353,6 +384,12 @@ button {
     color: white;
     border: none;
     transition: all 0.2s ease;
+    flex: 1;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .danger-btn:hover {
@@ -419,10 +456,6 @@ button {
 
 .tab-item:hover {
     transform: translateY(-2px);
-    background-color: var(--secondary-hover);
-}
-
-.tab-item:hover {
     background-color: var(--secondary-hover);
 }
 

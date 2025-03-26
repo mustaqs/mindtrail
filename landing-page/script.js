@@ -184,4 +184,133 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    
+    // Carousel functionality
+    initCarousel();
 });
+
+function initCarousel() {
+    const carousel = document.querySelector('.hero-carousel');
+    const items = document.querySelectorAll('.carousel-item');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.querySelector('.carousel-arrow.prev');
+    const nextBtn = document.querySelector('.carousel-arrow.next');
+    
+    if (!carousel || items.length === 0) return;
+    
+    let currentIndex = 0;
+    const itemWidth = carousel.clientWidth;
+    
+    // Update dots to show current slide
+    function updateDots() {
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+        });
+    }
+    
+    // Scroll to specific slide
+    function scrollToSlide(index) {
+        if (index < 0) index = items.length - 1;
+        if (index >= items.length) index = 0;
+        
+        currentIndex = index;
+        carousel.scrollTo({
+            left: index * itemWidth,
+            behavior: 'smooth'
+        });
+        
+        updateDots();
+    }
+    
+    // Handle dot clicks
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            scrollToSlide(index);
+        });
+    });
+    
+    // Handle arrow clicks
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            scrollToSlide(currentIndex - 1);
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            scrollToSlide(currentIndex + 1);
+        });
+    }
+    
+    // Handle scroll events to update active dot
+    carousel.addEventListener('scroll', () => {
+        const scrollPosition = carousel.scrollLeft;
+        const newIndex = Math.round(scrollPosition / itemWidth);
+        
+        if (newIndex !== currentIndex) {
+            currentIndex = newIndex;
+            updateDots();
+        }
+    });
+    
+    // Auto-advance slides every 8 seconds
+    let autoScrollInterval = setInterval(() => {
+        scrollToSlide(currentIndex + 1);
+    }, 8000);
+    
+    // Pause auto-scroll when user interacts with carousel
+    carousel.addEventListener('mouseenter', () => {
+        clearInterval(autoScrollInterval);
+    });
+    
+    carousel.addEventListener('mouseleave', () => {
+        autoScrollInterval = setInterval(() => {
+            scrollToSlide(currentIndex + 1);
+        }, 8000);
+    });
+    
+    // Handle touch events
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    carousel.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        clearInterval(autoScrollInterval);
+    }, { passive: true });
+    
+    carousel.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+        
+        autoScrollInterval = setInterval(() => {
+            scrollToSlide(currentIndex + 1);
+        }, 8000);
+    }, { passive: true });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        if (touchEndX < touchStartX - swipeThreshold) {
+            // Swipe left
+            scrollToSlide(currentIndex + 1);
+        }
+        if (touchEndX > touchStartX + swipeThreshold) {
+            // Swipe right
+            scrollToSlide(currentIndex - 1);
+        }
+    }
+    
+    // Initialize
+    updateDots();
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        // Recalculate item width
+        const newItemWidth = carousel.clientWidth;
+        
+        // Update scroll position
+        carousel.scrollTo({
+            left: currentIndex * newItemWidth,
+            behavior: 'auto'
+        });
+    });
+}
