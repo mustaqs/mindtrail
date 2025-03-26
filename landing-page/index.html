@@ -189,10 +189,16 @@
         <section class="demo" id="demo">
             <div class="section-content glass-card">
                 <h2>✨ See It in Action</h2>
-                <div class="demo-placeholder">
-                    <p>We're polishing up the magic. A quick demo is coming soon — sign up to be the first to see it.</p>
-                    <div class="mockup">
-                        <img src="https://placehold.co/800x500/1a1a1a/3a86ff?text=Mindtrail+Demo" alt="Mindtrail in action" class="mockup-image rounded-image">
+                <div class="demo-container">
+                    <p class="demo-description">Watch how Mindtrail helps you organize your research and save the tabs that matter.</p>
+                    <div class="video-container">
+                        <video id="demo-video" controls poster="images/screenshot1.png" class="demo-video">
+                            <source src="videos/mindtrail-demo.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="demo-cta">
+                        <a href="#" class="cta-button primary-cta" id="try-mindtrail-demo">Try Mindtrail Now</a>
                     </div>
                 </div>
             </div>
@@ -242,6 +248,10 @@
 
         <footer class="glass-footer">
             <p class="tagline footer-tagline">The calm after the clickstorm.</p>
+            <div class="footer-links">
+                <a href="mailto:support@mindtrail.dev" class="footer-link">Support</a>
+                <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+            </div>
             <p>&copy; 2025 Mindtrail. All rights reserved.</p>
         </footer>
     </div>
