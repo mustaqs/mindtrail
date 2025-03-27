@@ -56,12 +56,12 @@ export default function EarlyAccess() {
   };
 
   return (
-    <section id="early-access" className="py-20 bg-[#0a1122]">
+    <section id="early-access" className="py-20 bg-gray-50">
       <div className="max-w-3xl mx-auto px-6">
-        <div className="bg-[#111827] rounded-lg p-10 shadow-xl border border-gray-800">
+        <div className="bg-white rounded-lg p-10 shadow-lg border border-gray-200">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-white mb-4">Get Early Access to Mindtrail</h2>
-            <p className="text-white/70 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Get Early Access to Mindtrail</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
               Be one of the first to experience the future of tab management. Sign up now 
               and get exclusive early access to Mindtrail!
             </p>
@@ -69,7 +69,7 @@ export default function EarlyAccess() {
 
           <form onSubmit={handleSubmit} className="max-w-md mx-auto">
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-white/70 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
               </label>
               <input
@@ -78,7 +78,7 @@ export default function EarlyAccess() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="w-full px-4 py-3 bg-[#1a1f2e] border border-gray-700 rounded-md text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={isSubmitting}
                 required
               />
@@ -95,21 +95,19 @@ export default function EarlyAccess() {
             </button>
 
             {submitStatus === 'success' && (
-              <p className="mt-4 text-center text-green-400">
+              <p className="mt-4 text-center text-green-600">
                 {statusMessage}
               </p>
             )}
 
             {submitStatus === 'error' && (
-              <p className="mt-4 text-center text-red-400">
+              <p className="mt-4 text-center text-red-500">
                 {statusMessage}
               </p>
             )}
 
-            <p className="mt-4 text-xs text-center text-white/50">
-              By signing up for early access, you agree to receive emails from Mindtrail. You 
-              will receive an email with installation instructions shortly. We&apos;ll never share 
-              your information with third parties.
+            <p className="mt-6 text-center text-gray-500 text-sm">
+              By signing up for early access, you agree to receive emails from Mindtrail. You will never share your information with third parties.
             </p>
           </form>
         </div>

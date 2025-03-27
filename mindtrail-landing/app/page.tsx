@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#0a1122]">
+      <main className="min-h-screen bg-white">
         <Hero />
         <Features />
         <Demo />

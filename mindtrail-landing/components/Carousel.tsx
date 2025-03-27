@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { Swiper as SwiperComponent, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import type { Swiper } from 'swiper';
+import Image from 'next/image';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -37,7 +38,7 @@ export default function Carousel() {
   const swiperRef = useRef<Swiper | null>(null);
 
   return (
-    <div className="relative">
+    <div className="relative max-w-4xl mx-auto">
       <SwiperComponent
         modules={[Pagination, Navigation]}
         spaceBetween={0}
@@ -58,11 +59,13 @@ export default function Carousel() {
       >
         {screenshots.map((screenshot, index) => (
           <SwiperSlide key={index}>
-            <div className="relative">
-              <img 
+            <div className="relative flex justify-center">
+              <Image 
                 src={screenshot.image} 
                 alt={`Mindtrail screenshot ${index + 1}`} 
-                className="w-full h-auto rounded-lg shadow-lg border border-gray-800"
+                width={500}
+                height={350}
+                className="rounded-lg shadow-lg border border-gray-800 max-h-[500px] w-auto object-contain"
               />
             </div>
           </SwiperSlide>
@@ -79,7 +82,7 @@ export default function Carousel() {
           </svg>
         </button>
         
-        <p className="text-white/90 text-center text-lg font-medium max-w-2xl">
+        <p className="text-gray-900 text-center text-lg font-bold max-w-2xl">
           {screenshots[activeIndex].caption}
         </p>
         

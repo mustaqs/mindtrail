@@ -1,73 +1,127 @@
 import { Resend } from 'resend';
+import { supabaseAdmin } from './supabase';
 import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 // Use the same environment variables as in supabase.ts
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-console.log('[DEBUG] Supabase URL:', supabaseUrl);
-console.log('[DEBUG] Supabase Key:', supabaseAnonKey?.slice(0, 8), '...');
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-// Initialize Resend with better logging
+// Only log non-sensitive information
+console.log('[INFO] Initializing Supabase and Resend clients');
 const resendApiKey = process.env.RESEND_API_KEY || '';
-console.log('Resend API Key available:', !!resendApiKey);
+console.log('[INFO] Resend API Key available:', !!resendApiKey);
 export const resend = new Resend(resendApiKey);
 
 // Email template for early access sign-ups
-export const sendEarlyAccessEmail = async (email: string) => {
-  console.log('Starting email send process for:', email);
+export const sendEarlyAccessEmail = async (email: string, directAdminClient?: SupabaseClient) => {
+  console.log('[INFO] Starting email send process for:', email);
   
   try {
-    // Generate signed URL from Supabase
-    console.log('Generating signed URL from Supabase...');
-    const { data: signedUrlData, error } = await supabase
+    // Use the provided direct admin client if available, otherwise fall back to the imported one
+    const adminClient = directAdminClient || supabaseAdmin;
+    
+    // Check if any admin client is available (server-side only)
+    if (!adminClient) {
+      console.error('[ERROR] No Supabase admin client available. This should only be called server-side.');
+      throw new Error('Supabase admin client is not available. This function should only be called server-side.');
+    }
+    
+    // Check if the bucket exists first
+    const { data: buckets, error: bucketError } = await adminClient
       .storage
-      .from('downloads')
-      .createSignedUrl('mindtrail-early-access.zip', 60 * 60 * 24);
+      .listBuckets();
+    
+    console.log('[INFO] Checking for early-access bucket');
+    
+    if (bucketError) {
+      console.error('[ERROR] Error listing buckets');
+    }
+    
+    // Try to create the bucket if it doesn't exist
+    const bucketExists = buckets?.some(b => b.name === 'early-access');
+    
+    if (!bucketExists) {
+      console.log('[INFO] Bucket does not exist, attempting to create it');
+      const { data: createData, error: createError } = await adminClient
+        .storage
+        .createBucket('early-access', {
+          public: true
+        });
+      
+      if (createError) {
+        console.error('[ERROR] Error creating bucket');
+      } else {
+        console.log('[INFO] Successfully created bucket');
+      }
+    }
+    
+    // Check if the file exists in the bucket
+    const { data: files, error: filesError } = await adminClient
+      .storage
+      .from('early-access')
+      .list();
+    
+    console.log('[INFO] Checking for extension file in bucket');
+    
+    if (filesError) {
+      console.error('[ERROR] Error listing files');
+    }
+    
+    // Try to get the public URL first as it's more reliable
+    console.log('[INFO] Trying to get public URL');
+    const { data: publicUrlData } = await adminClient
+      .storage
+      .from('early-access')
+      .getPublicUrl('mindtrail-early-access.zip');
+    
+    // Generate signed URL from Supabase with proper options
+    console.log('[INFO] Generating signed URL from Supabase');
+    const { data: signedUrlData, error } = await adminClient
+      .storage
+      .from('early-access')
+      .createSignedUrl('mindtrail-early-access.zip', 60 * 60 * 24, {
+        download: true, // Force download header
+      });
 
     let downloadUrl;
     let usedFallback = false;
     
     if (error || !signedUrlData?.signedUrl) {
-      console.error('Error generating signed URL:', error);
-      // Fall back to a static URL if Supabase fails
-      downloadUrl = 'https://storage.googleapis.com/mindtrail-public/mindtrail-early-access.zip';
-      usedFallback = true;
-      console.log('Using fallback URL:', downloadUrl);
+      console.error('[ERROR] Error generating signed URL');
+      
+      // Try to get a public URL as a second attempt before falling back
+      if (publicUrlData?.publicUrl) {
+        downloadUrl = publicUrlData.publicUrl;
+        console.log('[INFO] Using public URL instead');
+      } else {
+        // Fall back to a static URL if Supabase fails
+        downloadUrl = 'https://storage.googleapis.com/mindtrail-public/mindtrail-early-access.zip';
+        usedFallback = true;
+        console.log('[INFO] Using fallback URL');
+      }
     } else {
       downloadUrl = signedUrlData.signedUrl;
-      console.log('Successfully generated download URL:', downloadUrl);
+      console.log('[INFO] Successfully generated download URL');
     }
     
-    console.log('Sending email with Resend...');
+    console.log('[INFO] Sending email with Resend');
     const data = await resend.emails.send({
       from: 'Mindtrail <info@mindtrail.xyz>',
       to: email,
       subject: 'Welcome to Mindtrail Early Access',
-      html: getEmailTemplate(email, downloadUrl, usedFallback, supabaseUrl),
+      html: getEmailTemplate(email, downloadUrl),
     });
     
-    console.log('Email sent successfully, response:', data);
+    console.log('[INFO] Email sent successfully');
     return { success: true, data };
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('[ERROR] Error sending email:', error);
     return { success: false, error };
   }
 };
 
 // Separate function for the email template to keep the code cleaner
-function getEmailTemplate(email: string, downloadUrl: string, usedFallback: boolean = false, supabaseUrl: string = '') {
-  // Include detailed debug information in the email
-  const debugInfo = `<div style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-radius: 4px; font-family: monospace; font-size: 12px; color: #333;">
-    <p><strong>Debug info:</strong></p>
-    <p>Supabase URL: ${supabaseUrl}</p>
-    <p>Download URL: ${downloadUrl}</p>
-    <p>Used fallback: ${usedFallback ? 'Yes' : 'No'}</p>
-    <p>Expected bucket path: ${supabaseUrl}/storage/v1/object/public/downloads/mindtrail-early-access.zip</p>
-    <p>Direct bucket URL: ${supabaseUrl}/storage/v1/object/public/downloads/mindtrail-early-access.zip</p>
-  </div>`;
-
+function getEmailTemplate(email: string, downloadUrl: string) {
   return `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
       <h1 style="color: #3b82f6; margin-bottom: 24px;">Welcome to Mindtrail Early Access!</h1>
@@ -89,8 +143,6 @@ function getEmailTemplate(email: string, downloadUrl: string, usedFallback: bool
         <li>The Mindtrail icon will appear in your browser toolbar</li>
       </ol>
       
-      <p style="margin-top: 32px;"><strong>Password:</strong> <code>clickstorm</code></p>
-      
       <p>If you have any questions or feedback, please reply directly to this email. We're here to help!</p>
       
       <p style="margin-top: 32px;">Happy browsing,<br>The Mindtrail Team</p>
@@ -99,8 +151,6 @@ function getEmailTemplate(email: string, downloadUrl: string, usedFallback: bool
         <p>www.mindtrail.xyz | info@mindtrail.xyz</p>
         <p>This email was sent to ${email} because you signed up for early access to Mindtrail.</p>
       </div>
-      
-      ${debugInfo}
     </div>
   `;
 }

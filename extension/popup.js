@@ -26,8 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectableTabsContainer = document.getElementById('selectable-tabs');
         const saveSelectedTabsButton = document.getElementById('save-selected-tabs');
         
-        // This helper function is not used anywhere, removing it for optimization
-        
         // Load saved preferences
         chrome.storage.local.get('closeTabsAfterSaving', (data) => {
             if (data.closeTabsAfterSaving !== undefined) {
@@ -139,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Display only the 5 most recent sessions
                     const recentSessions = sortedSessions.slice(0, 5);
                 
-                // Create session items
+                    // Create session items
                     recentSessions.forEach(session => {
                         const sessionElement = createSessionElement(session);
                         savedSessionsListElement.appendChild(sessionElement);
@@ -147,6 +145,73 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         }
+
+        // Listen for tab state changes from background script
+        chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+            if (message.action === 'tabStateChanged') {
+                // Update tab count
+                tabCountElement.textContent = message.tabCount;
+                
+                // Update session count
+                sessionCountElement.textContent = message.sessionCount;
+                
+                // Update current tabs display
+                if (currentSessionTabsElement && message.currentTabs) {
+                    // Store tabs for later use
+                    currentTabs = message.currentTabs;
+                    
+                    // Clear and display tabs with minimal DOM operations
+                    currentSessionTabsElement.textContent = '';
+                    
+                    if (message.currentTabs.length > 0) {
+                        // Create document fragment for better performance
+                        const fragment = document.createDocumentFragment();
+                        
+                        message.currentTabs.forEach(tab => {
+                            const tabElement = document.createElement('div');
+                            tabElement.className = 'tab-item';
+                            
+                            const favicon = document.createElement('img');
+                            favicon.className = 'tab-favicon';
+                            
+                            // Only add favicon if it exists
+                            if (tab.favIconUrl) {
+                                favicon.src = tab.favIconUrl;
+                                favicon.onerror = () => { favicon.style.display = 'none'; };
+                            } else {
+                                favicon.style.display = 'none';
+                            }
+                            
+                            const title = document.createElement('span');
+                            title.className = 'tab-title';
+                            title.textContent = tab.title;
+                            
+                            tabElement.appendChild(favicon);
+                            tabElement.appendChild(title);
+                            fragment.appendChild(tabElement);
+                        });
+                        
+                        currentSessionTabsElement.appendChild(fragment);
+                    } else {
+                        const emptyState = document.createElement('p');
+                        emptyState.className = 'empty-state';
+                        emptyState.textContent = 'No tabs open in this window';
+                        currentSessionTabsElement.appendChild(emptyState);
+                    }
+                }
+                
+                // Also refresh saved sessions to reflect any changes
+                loadSavedSessions();
+            }
+        });
+        
+        // Request initial tab and session counts from background script
+        chrome.runtime.sendMessage({ action: 'getTabAndSessionCounts' }, (response) => {
+            if (response) {
+                tabCountElement.textContent = response.tabCount;
+                sessionCountElement.textContent = response.sessionCount;
+            }
+        });
         
         // Function to create a session element
         function createSessionElement(session) {
@@ -253,6 +318,65 @@ document.addEventListener('DOMContentLoaded', () => {
             return sessionElement;
         }
 
+        // Save tabs function - modified to update UI after saving
+        function saveTabs(tabsToSave, customName = '', context = '') {
+            if (tabsToSave.length === 0) {
+                alert('No tabs to save.');
+                return;
+            }
+            
+            // Generate a session name if not provided
+            const sessionName = customName || `Session ${new Date().toLocaleString()}`;
+            
+            // Create session object
+            const timestamp = Date.now();
+            const session = {
+                id: timestamp,
+                date: new Date().toISOString(),
+                created: timestamp,
+                name: sessionName,
+                context: context || '',
+                tabs: tabsToSave.map(tab => ({
+                    id: tab.id,
+                    title: tab.title,
+                    url: tab.url,
+                    favIconUrl: tab.favIconUrl
+                })),
+                tabCount: tabsToSave.length
+            };
+            
+            // Add to storage
+            chrome.storage.local.get('sessions', (data) => {
+                const sessions = data.sessions || [];
+                sessions.push(session);
+                
+                chrome.storage.local.set({ sessions }, () => {
+                    console.log('Session saved:', sessionName);
+                    
+                    // Check if we should close tabs
+                    if (closeTabsCheckbox.checked) {
+                        // Get tab IDs to close
+                        const tabIdsToClose = tabsToSave.map(tab => tab.id);
+                        
+                        // Close tabs
+                        chrome.tabs.remove(tabIdsToClose, () => {
+                            console.log('Tabs closed:', tabIdsToClose.length);
+                            
+                            // Update UI immediately after closing tabs
+                            setTimeout(() => {
+                                // Force refresh the UI
+                                loadCurrentTabs();
+                                loadSavedSessions();
+                            }, 100); // Small delay to ensure Chrome has updated its internal state
+                        });
+                    }
+                    
+                    // Update UI regardless
+                    loadSavedSessions();
+                });
+            });
+        }
+        
         // Save preference when checkbox changes
         closeTabsCheckbox.addEventListener('change', () => {
             try {
@@ -261,50 +385,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error saving preference:', error);
             }
         });
-
-        // Function to save tabs (either all or selected)
-        function saveTabs(tabsToSave, customName = '', context = '') {
-            try {
-                // Use provided name/context or default
-                const defaultName = `Session ${new Date().toLocaleString()}`;
-                
-                const session = {
-                    id: Date.now(),
-                    date: new Date().toISOString(),
-                    name: customName || defaultName,
-                    context: context || '',
-                    tabs: tabsToSave.map(tab => ({
-                        title: tab.title,
-                        url: tab.url,
-                        favIconUrl: tab.favIconUrl
-                    })),
-                    tabCount: tabsToSave.length
-                };
-
-                // Save to storage
-                chrome.storage.local.get('sessions', (data) => {
-                    const sessions = data.sessions || [];
-                    sessions.push(session);
-                    
-                    chrome.storage.local.set({ sessions }, () => {
-                        // Update session count
-                        sessionCountElement.textContent = sessions.length;
-                        
-                        // Reload saved sessions display
-                        loadSavedSessions();
-                        
-                        // Close tabs if option is checked
-                        if (closeTabsCheckbox.checked && tabsToSave.length > 0) {
-                            const tabIds = tabsToSave.map(tab => tab.id);
-                            chrome.tabs.remove(tabIds);
-                        }
-                    });
-                });
-            } catch (error) {
-                console.error('Error saving tabs:', error);
-            }
-        }
         
+        // Refresh UI when popup becomes visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                loadCurrentTabs();
+                loadSavedSessions();
+            }
+        });
+        
+        // Force refresh on popup focus
+        window.addEventListener('focus', () => {
+            loadCurrentTabs();
+            loadSavedSessions();
+        });
+        
+        // Periodically refresh the UI while popup is open
+        const refreshInterval = setInterval(() => {
+            if (document.visibilityState === 'visible') {
+                loadCurrentTabs();
+                loadSavedSessions();
+            }
+        }, 1000); // Check every second
+        
+        // Clean up interval when popup closes
+        window.addEventListener('beforeunload', () => {
+            clearInterval(refreshInterval);
+        });
+
         // Open save tabs modal
         saveTabsButton.addEventListener('click', () => {
             // Clear previous inputs

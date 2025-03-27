@@ -61,7 +61,85 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       .catch(error => sendResponse({ success: false, error: error.message }));
     return true; // Required for async sendResponse
   }
+
+  // New: Handle request for tab and session counts
+  if (message.action === 'getTabAndSessionCounts') {
+    Promise.all([
+      new Promise(resolve => {
+        chrome.tabs.query({ currentWindow: true }, tabs => {
+          resolve(tabs.length);
+        });
+      }),
+      new Promise(resolve => {
+        chrome.storage.local.get('sessions', data => {
+          resolve(data.sessions ? data.sessions.length : 0);
+        });
+      })
+    ]).then(([tabCount, sessionCount]) => {
+      sendResponse({ tabCount, sessionCount });
+    });
+    return true; // Required for async sendResponse
+  }
 });
+
+// Add tab event listeners to detect changes
+chrome.tabs.onCreated.addListener((tab) => {
+  notifyPopupOfTabChange();
+});
+
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+  notifyPopupOfTabChange();
+});
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  // Only notify for complete loads or URL changes to avoid excessive updates
+  if (changeInfo.status === 'complete' || changeInfo.url) {
+    notifyPopupOfTabChange();
+  }
+});
+
+chrome.tabs.onMoved.addListener((tabId, moveInfo) => {
+  notifyPopupOfTabChange();
+});
+
+chrome.tabs.onAttached.addListener((tabId, attachInfo) => {
+  notifyPopupOfTabChange();
+});
+
+chrome.tabs.onDetached.addListener((tabId, detachInfo) => {
+  notifyPopupOfTabChange();
+});
+
+// Function to notify popup of tab changes
+function notifyPopupOfTabChange() {
+  // Get current tab count
+  chrome.tabs.query({ currentWindow: true }, (tabs) => {
+    const tabCount = tabs.length;
+    
+    // Get session count
+    chrome.storage.local.get('sessions', (data) => {
+      const sessionCount = data.sessions ? data.sessions.length : 0;
+      
+      // Send message to popup if it's open
+      chrome.runtime.sendMessage({
+        action: 'tabStateChanged',
+        tabCount: tabCount,
+        sessionCount: sessionCount,
+        currentTabs: tabs.map(tab => ({
+          id: tab.id,
+          title: tab.title,
+          url: tab.url,
+          favIconUrl: tab.favIconUrl
+        }))
+      }).catch(error => {
+        // Ignore errors when popup is not open
+        if (!error.message.includes("Could not establish connection")) {
+          console.error('Error sending tab state change notification:', error);
+        }
+      });
+    });
+  });
+}
 
 // Function to save current tabs
 async function saveCurrentTabs(sessionName = '') {
