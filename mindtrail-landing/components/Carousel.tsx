@@ -49,55 +49,48 @@ export default function Carousel() {
         }}
         onSlideChange={(swiper) => {
           // When using loop mode, we need to handle the real index
-          const realIndex = swiper.realIndex;
-          setActiveIndex(realIndex);
+          setActiveIndex(swiper.realIndex);
         }}
-        onSwiper={(swiper) => { swiperRef.current = swiper; }}
-        className="rounded-md overflow-hidden"
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
+        }}
+        className="mb-8"
       >
-        {screenshots.map((item, i) => (
-          <SwiperSlide key={i}>
-            <div className="aspect-video relative">
-              <img
-                src={item.image}
-                alt={`Mindtrail Screenshot ${i + 1}`}
-                className="w-full h-full object-contain"
-                style={{ maxHeight: '500px' }}
+        {screenshots.map((screenshot, index) => (
+          <SwiperSlide key={index}>
+            <div className="relative">
+              <img 
+                src={screenshot.image} 
+                alt={`Mindtrail screenshot ${index + 1}`} 
+                className="w-full h-auto rounded-lg shadow-lg border border-gray-800"
               />
             </div>
-            <p className="text-center text-white/80 text-sm mt-4 mb-2">{item.caption}</p>
           </SwiperSlide>
         ))}
       </SwiperComponent>
-      
-      {/* Custom Navigation - Larger touch targets for mobile */}
-      <button className="carousel-prev absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white w-10 h-10 flex items-center justify-center rounded-full">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-        </svg>
-      </button>
-      <button className="carousel-next absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white w-10 h-10 flex items-center justify-center rounded-full">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-        </svg>
-      </button>
-      
-      {/* Custom Pagination that highlights based on activeIndex */}
-      <div className="flex justify-center mt-4 space-x-3">
-        {screenshots.map((_, index) => (
-          <button 
-            key={index}
-            onClick={() => {
-              if (swiperRef.current) {
-                swiperRef.current.slideToLoop(index);
-              }
-            }}
-            className={`w-2.5 h-2.5 rounded-full transition-colors ${
-              index === activeIndex ? 'bg-blue-500' : 'bg-gray-500/50 hover:bg-gray-400'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+
+      <div className="flex justify-center items-center mb-8">
+        <button 
+          className="carousel-prev bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center mr-4 hover:bg-blue-600 transition-colors"
+          aria-label="Previous slide"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        
+        <p className="text-white/90 text-center text-lg font-medium max-w-2xl">
+          {screenshots[activeIndex].caption}
+        </p>
+        
+        <button 
+          className="carousel-next bg-blue-500 text-white w-10 h-10 rounded-full flex items-center justify-center ml-4 hover:bg-blue-600 transition-colors"
+          aria-label="Next slide"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
     </div>
   );
