@@ -52,7 +52,7 @@ export default function PrivacyPolicy() {
             <li>These APIs do not store your data and are used only to generate helpful responses</li>
           </ul>
           
-          <h2 className="text-2xl font-bold text-white mt-8 mb-4">What We Don't Do</h2>
+          <h2 className="text-2xl font-bold text-white mt-8 mb-4">What We Don&apos;t Do</h2>
           <ul className="list-disc pl-6 text-white/70 mb-6">
             <li>We do not track your browsing behavior</li>
             <li>We do not run in the background</li>
@@ -68,7 +68,7 @@ export default function PrivacyPolicy() {
           
           <h2 className="text-2xl font-bold text-white mt-8 mb-4">Updates to This Policy</h2>
           <p className="text-white/70">
-            This policy may be updated from time to time. We'll notify you via the landing page or extension update notes.
+            This policy may be updated from time to time. We&apos;ll notify you via the landing page or extension update notes.
           </p>
         </div>
       </div>

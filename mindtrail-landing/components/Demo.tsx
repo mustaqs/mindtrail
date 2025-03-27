@@ -1,10 +1,10 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useState, useRef } from 'react';
 
 export default function Demo() {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -18,37 +18,39 @@ export default function Demo() {
   };
 
   return (
-    <section id="demo" className="py-20 bg-[#0a1122]">
-      <div className="max-w-4xl mx-auto px-6">
-        <div className="text-center mb-10">
+    <section id="demo" className="py-20 bg-gradient-to-b from-[#0a1122] to-[#111827]">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-white mb-4">See Mindtrail in Action</h2>
           <p className="text-white/70 max-w-2xl mx-auto">
-            Watch how Mindtrail helps you organize your browser tabs and boost your productivity.
+            Watch how Mindtrail helps you save, organize, and revisit your tabs with just a few clicks.
           </p>
         </div>
 
-        <div className="bg-[#111827] rounded-lg p-6 shadow-xl border border-gray-800 overflow-hidden">
-          <div className="relative aspect-video rounded-md overflow-hidden">
-            <video
-              ref={videoRef}
-              className="w-full h-full object-cover"
-              poster="/images/screenshot1.png"
-              controls
-              preload="metadata"
-            >
-              <source src="/video/mindtrail-demo.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-        </div>
-
-        <div className="mt-10 text-center">
-          <a
-            href="#early-access"
-            className="bg-blue-500 text-white px-6 py-3 rounded font-medium hover:bg-blue-600 transition-colors inline-block"
+        <div className="relative rounded-xl overflow-hidden shadow-2xl border border-gray-800">
+          <video 
+            ref={videoRef}
+            className="w-full"
+            poster="/images/video-poster.jpg"
+            onClick={togglePlay}
           >
-            Get Early Access
-          </a>
+            <source src="/video/mindtrail-demo.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          
+          <button 
+            className={`absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
+            onClick={togglePlay}
+            aria-label={isPlaying ? "Pause video" : "Play video"}
+          >
+            {!isPlaying && (
+              <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                </svg>
+              </div>
+            )}
+          </button>
         </div>
       </div>
     </section>

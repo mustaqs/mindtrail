@@ -108,7 +108,7 @@ export default function EarlyAccess() {
 
             <p className="mt-4 text-xs text-center text-white/50">
               By signing up for early access, you agree to receive emails from Mindtrail. You 
-              will receive an email with installation instructions shortly. We'll never share 
+              will receive an email with installation instructions shortly. We&apos;ll never share 
               your information with third parties.
             </p>
           </form>
