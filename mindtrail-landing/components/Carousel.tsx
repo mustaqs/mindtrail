@@ -37,7 +37,7 @@ export default function Carousel() {
   const swiperRef = useRef<Swiper | null>(null);
 
   return (
-    <div className="relative">
+    <div className="relative max-w-4xl mx-auto">
       <SwiperComponent
         modules={[Pagination, Navigation]}
         spaceBetween={0}
@@ -58,11 +58,11 @@ export default function Carousel() {
       >
         {screenshots.map((screenshot, index) => (
           <SwiperSlide key={index}>
-            <div className="relative">
+            <div className="relative flex justify-center">
               <img 
                 src={screenshot.image} 
                 alt={`Mindtrail screenshot ${index + 1}`} 
-                className="w-full h-auto rounded-lg shadow-lg border border-gray-800"
+                className="rounded-lg shadow-lg border border-gray-800 max-h-[500px] w-auto object-contain"
               />
             </div>
           </SwiperSlide>
