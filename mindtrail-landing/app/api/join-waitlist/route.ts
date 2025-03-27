@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       email = body.email;
       console.log('[INFO] Received email submission');
     } catch (error) {
-      console.error('[ERROR] Error parsing JSON request body');
+      console.error('[ERROR] Error parsing JSON request body', error);
       return NextResponse.json(
         { error: 'Invalid request format. Please provide a valid JSON body.' },
         { status: 400 }
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
             { status: 200 }
           );
         } catch (error) {
-          console.error('[ERROR] Error sending email to existing user');
+          console.error('[ERROR] Error sending email to existing user', error);
           return NextResponse.json(
             { 
               message: 'You\'re already on the waitlist! However, we couldn\'t send the email. Please try again later.',
@@ -90,7 +90,7 @@ export async function POST(request: Request) {
         }
       }
       
-      console.error('[ERROR] Error inserting email into Supabase');
+      console.error('[ERROR] Error inserting email into Supabase', insertError);
       return NextResponse.json(
         { error: 'Failed to add you to the waitlist. Please try again later.' },
         { status: 500 }
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
       console.log('[INFO] Email result:', emailResult.success);
       
       if (!emailResult.success) {
-        console.error('[ERROR] Email sending failed');
+        console.error('[ERROR] Email sending failed', emailResult);
         return NextResponse.json(
           { 
             message: 'You\'ve been added to the waitlist, but we couldn\'t send the welcome email. Please try again later.',
@@ -123,7 +123,7 @@ export async function POST(request: Request) {
         { status: 200 }
       );
     } catch (error) {
-      console.error('[ERROR] Error sending email');
+      console.error('[ERROR] Error sending email', error);
       return NextResponse.json(
         { 
           message: 'You\'ve been added to the waitlist, but we couldn\'t send the welcome email. Please try again later.',
