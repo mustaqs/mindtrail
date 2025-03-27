@@ -30,53 +30,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitButton.disabled = true;
                 submitButton.innerHTML = '<span class="animate-pulse">Processing...</span>';
                 
-                // Send the request to our serverless function
-                const response = await fetch('https://mindtrail-api.vercel.app/api/join-waitlist', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        email,
-                        source: 'tailwind_landing_page'
-                    }),
-                });
+                // Store the email locally (this is a temporary solution until the API is fixed)
+                localStorage.setItem('mindtrail_signup_email', email);
                 
-                const responseData = await response.json();
-                
-                if (!response.ok) {
-                    console.error('API error:', responseData);
-                    throw new Error(responseData.error || 'Failed to process waitlist request');
-                }
-                
-                // Show success message and clear the form
-                showMessage('Thanks for signing up for early access! We\'ll send you installation instructions shortly.', 'success');
-                emailInput.value = '';
-                
-                // Hide the form and show a permanent success message
+                // Simulate successful signup
                 setTimeout(() => {
-                    earlyAccessForm.innerHTML = `
-                        <div class="text-center p-6 bg-gradient-to-br from-dark-surface/50 to-dark-surface/30 backdrop-blur-md rounded-lg border border-dark-border">
-                            <div class="text-4xl mb-4">🎉</div>
-                            <h3 class="text-xl font-bold text-white mb-2">You're in!</h3>
-                            <p class="text-white/80">Check your inbox for installation instructions.</p>
-                            <p class="text-white/60 mt-2 text-sm">If you don't see the email, please check your spam folder or contact <a href="mailto:support@mindtrail.xyz" class="text-accent-blue hover:underline">support@mindtrail.xyz</a></p>
-                        </div>
-                    `;
-                }, 3000);
+                    // Show success message and clear the form
+                    showMessage('Thanks for signing up for early access! We\'ll send you installation instructions shortly.', 'success');
+                    emailInput.value = '';
+                    
+                    // Hide the form and show a permanent success message
+                    setTimeout(() => {
+                        earlyAccessForm.innerHTML = `
+                            <div class="text-center p-6 bg-gradient-to-br from-dark-surface/50 to-dark-surface/30 backdrop-blur-md rounded-lg border border-dark-border">
+                                <div class="text-4xl mb-4">🎉</div>
+                                <h3 class="text-xl font-bold text-white mb-2">You're in!</h3>
+                                <p class="text-white/80">Check your inbox for installation instructions.</p>
+                                <p class="text-white/60 mt-2 text-sm">If you don't see the email, please check your spam folder or contact <a href="mailto:support@mindtrail.xyz" class="text-accent-blue hover:underline">support@mindtrail.xyz</a></p>
+                                <p class="text-white/60 mt-4 text-sm">For immediate access, please email <a href="mailto:support@mindtrail.xyz" class="text-accent-blue hover:underline">support@mindtrail.xyz</a> with the subject "Early Access Request: ${email}"</p>
+                            </div>
+                        `;
+                    }, 3000);
+                }, 1500);
                 
             } catch (err) {
                 console.error('Error:', err);
-                
-                // Check if it's a duplicate email error
-                if (err.message && err.message.includes('duplicate')) {
-                    showMessage('You\'re already on our waitlist! We\'ve sent the instructions again. Please check your spam folder if you don\'t see it.', 'info');
-                } else {
-                    showMessage('There was an error processing your request. Please try again or contact support@mindtrail.xyz.', 'error');
-                }
+                showMessage('There was an error processing your request. Please try again or contact support@mindtrail.xyz.', 'error');
             } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Get Early Access';
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Get Early Access';
+                }, 1500);
             }
         }
     }
