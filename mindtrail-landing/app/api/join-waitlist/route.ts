@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       const body = await request.json();
       email = body.email;
       console.log('[INFO] Received email submission');
-    } catch (parseError) {
+    } catch (error) {
       console.error('[ERROR] Error parsing JSON request body');
       return NextResponse.json(
         { error: 'Invalid request format. Please provide a valid JSON body.' },
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
 
     // Insert into Supabase
     console.log('[INFO] Inserting email into Supabase waitlist');
-    const { data, error } = await supabase
+    const { error: insertError } = await supabase
       .from('waitlist')
       .insert([{ 
         email, 
@@ -60,9 +60,9 @@ export async function POST(request: Request) {
       }])
       .select();
 
-    if (error) {
+    if (insertError) {
       // Check if it's a duplicate email error
-      if (error.code === '23505') {
+      if (insertError.code === '23505') {
         console.log('[INFO] Duplicate email detected, sending email again');
         // Even for duplicates, we can still send the email again
         try {
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
             },
             { status: 200 }
           );
-        } catch (emailError) {
+        } catch (error) {
           console.error('[ERROR] Error sending email to existing user');
           return NextResponse.json(
             { 
@@ -117,12 +117,12 @@ export async function POST(request: Request) {
       
       return NextResponse.json(
         { 
-          message: 'You\'ve been added to the waitlist! Check your email for access details.',
+          message: 'You\'re on the list! Check your email for access details. Check your spam folder if you don\'t see it shortly.',
           emailSent: true
         },
         { status: 200 }
       );
-    } catch (emailError) {
+    } catch (error) {
       console.error('[ERROR] Error sending email');
       return NextResponse.json(
         { 
@@ -133,7 +133,7 @@ export async function POST(request: Request) {
       );
     }
   } catch (error) {
-    console.error('[ERROR] Unexpected error in join-waitlist API');
+    console.error('[ERROR] Unexpected error in join-waitlist API:', error);
     return NextResponse.json(
       { error: 'An unexpected error occurred. Please try again later.' },
       { status: 500 }

@@ -83,11 +83,11 @@ export default function Features() {
   ];
 
   return (
-    <section id="features" className="py-20 bg-[#0a1122]">
+    <section id="features" className="py-20 bg-gray-50">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-blue-500 mb-4">Stay Organized While You Think and Learn</h2>
-          <p className="text-white/70 max-w-3xl mx-auto">
+          <h2 className="text-4xl font-bold text-blue-600 mb-4">Stay Organized While You Think and Learn</h2>
+          <p className="text-gray-600 max-w-3xl mx-auto">
             Mindtrail helps you save only the tabs you care about, add context, and revisit
             your research with clarity.
           </p>
@@ -96,14 +96,18 @@ export default function Features() {
         <div className="grid md:grid-cols-2 gap-8">
           {/* Left Column - Available Today */}
           <div>
-            <h3 className="text-xl font-semibold text-white mb-6 text-center">Available Today</h3>
-            <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-gray-800 mb-6 text-center">Available Today</h3>
+            <div className="space-y-6">
               {availableFeatures.map((feature, index) => (
-                <div key={index} className="bg-[#111827] p-5 rounded-lg border border-gray-800 flex items-start gap-4">
-                  <div className={`${feature.color} p-2 rounded-md bg-blue-900/30`}>
-                    {feature.icon}
+                <div key={index} className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="flex items-start">
+                    <div className="mr-4 text-blue-500 flex-shrink-0">
+                      {feature.icon}
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-800 mb-1">{feature.title}</h4>
+                    </div>
                   </div>
-                  <p className="text-white">{feature.title}</p>
                 </div>
               ))}
             </div>
@@ -111,27 +115,22 @@ export default function Features() {
 
           {/* Right Column - Coming Soon */}
           <div>
-            <h3 className="text-xl font-semibold text-white mb-6 text-center">Coming Soon</h3>
-            <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-gray-800 mb-6 text-center">Coming Soon</h3>
+            <div className="space-y-6">
               {comingSoonFeatures.map((feature, index) => (
-                <div key={index} className="bg-[#111827] p-5 rounded-lg border border-gray-800 flex items-start gap-4">
-                  <div className={`${feature.color} p-2 rounded-md bg-blue-900/30`}>
-                    {feature.icon}
+                <div key={index} className="bg-white p-6 rounded-lg shadow-md border border-gray-200 opacity-80 hover:shadow-lg hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="flex items-start">
+                    <div className="mr-4 text-blue-500 flex-shrink-0">
+                      {feature.icon}
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-800 mb-1">{feature.title}</h4>
+                    </div>
                   </div>
-                  <p className="text-white">{feature.title}</p>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-
-        <div className="mt-12 text-center">
-          <a
-            href="#early-access"
-            className="bg-blue-500 text-white px-6 py-3 rounded font-medium hover:bg-blue-600 transition-colors inline-block"
-          >
-            Get Early Access
-          </a>
         </div>
       </div>
     </section>
