@@ -3,6 +3,7 @@ import Hero from '../components/Hero';
 import Features from '../components/Features';
 import Demo from '../components/Demo';
 import EarlyAccess from '../components/EarlyAccess';
+import Reviews from '../components/Reviews';
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <Features />
         <Demo />
         <EarlyAccess />
+        <Reviews />
         {/* Additional sections will be added here */}
       </main>
     </>
