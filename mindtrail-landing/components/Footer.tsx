@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FaXTwitter } from 'react-icons/fa6';
 
 export default function Footer() {
   return (
@@ -36,8 +37,23 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="mt-8 pt-8 border-t border-gray-200 text-center text-gray-500 text-sm">
-          <p> {new Date().getFullYear()} Mindtrail. All rights reserved.</p>
+        <div className="mt-8 pt-8 border-t border-gray-200 flex flex-col items-center">
+          {/* Social Links */}
+          <div className="flex space-x-4 mb-4">
+            <a 
+              href="https://x.com/mindtrailapp" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+              aria-label="Follow us on X (Twitter)"
+            >
+              <FaXTwitter className="h-5 w-5" />
+            </a>
+          </div>
+          
+          <p className="text-center text-gray-500 text-sm">
+            {new Date().getFullYear()} Mindtrail. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
