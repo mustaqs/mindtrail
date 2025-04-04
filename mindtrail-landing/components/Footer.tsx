@@ -3,9 +3,9 @@ import { FaXTwitter, FaInstagram } from 'react-icons/fa6';
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-100 py-10 border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-center">
+    <footer className="bg-gray-100 py-8 sm:py-10 border-t border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-col items-center text-center md:text-left md:flex-row md:justify-between md:items-start">
           <div className="mb-6 md:mb-0">
             <Link href="/" className="text-gray-900 text-xl font-bold">
               Mindtrail
@@ -15,7 +15,7 @@ export default function Footer() {
             </p>
           </div>
           
-          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8">
+          <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-8">
             <Link 
               href="/privacy" 
               className="text-gray-600 hover:text-gray-900 transition-colors"
@@ -41,7 +41,7 @@ export default function Footer() {
           {/* Social Links */}
           <div className="flex space-x-6 mb-4">
             <a 
-              href="https://x.com/mindtrailapp" 
+              href="https://x.com/Mindtrailhq" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-gray-900 transition-colors"
