@@ -19,10 +19,10 @@ export default function Hero() {
         </p>
         
         <a
-          href="#early-access"
+          href="https://chromewebstore.google.com/detail/mindtrail-smart-tab-manag/jdlkiaielmolhdlgohcmoajjhdclchoa"
           className="bg-blue-500 text-white px-6 py-3 rounded font-medium hover:bg-blue-600 transition-colors inline-block mb-8"
         >
-          Get Early Access
+          Get Mindtrail
         </a>
         
         <p className="text-gray-500 text-sm mb-12">The calm after the clickstorm.</p>

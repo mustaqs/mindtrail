@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     }
 
     // Insert into Supabase
-    console.log('[INFO] Inserting email into Supabase waitlist');
+    console.log('[INFO] Inserting email into Supabase newsletter subscribers');
     const { error: insertError } = await supabase
       .from('waitlist')
       .insert([{ 
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
           
           return NextResponse.json(
             { 
-              message: 'You\'re already on the waitlist! We\'ve sent the access email again.',
+              message: 'You\'re already subscribed to our newsletter! We\'ve sent you the welcome email again.',
               emailSent: emailResult.success
             },
             { status: 200 }
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
           console.error('[ERROR] Error sending email to existing user', error);
           return NextResponse.json(
             { 
-              message: 'You\'re already on the waitlist! However, we couldn\'t send the email. Please try again later.',
+              message: 'You\'re already subscribed to our newsletter! However, we couldn\'t send the email. Please try again later.',
               error: 'Email sending failed'
             },
             { status: 500 }
@@ -92,14 +92,14 @@ export async function POST(request: Request) {
       
       console.error('[ERROR] Error inserting email into Supabase', insertError);
       return NextResponse.json(
-        { error: 'Failed to add you to the waitlist. Please try again later.' },
+        { error: 'Failed to subscribe you to our newsletter. Please try again later.' },
         { status: 500 }
       );
     }
 
     // Send email
     try {
-      console.log('[INFO] Sending early access email');
+      console.log('[INFO] Sending welcome email');
       // Pass the direct admin client to the email function
       const emailResult = await sendEarlyAccessEmail(email, supabaseAdminDirect);
       console.log('[INFO] Email result:', emailResult.success);
@@ -108,7 +108,7 @@ export async function POST(request: Request) {
         console.error('[ERROR] Email sending failed', emailResult);
         return NextResponse.json(
           { 
-            message: 'You\'ve been added to the waitlist, but we couldn\'t send the welcome email. Please try again later.',
+            message: 'You\'ve been subscribed to our newsletter, but we couldn\'t send the welcome email. Please try again later.',
             error: 'Email sending failed'
           },
           { status: 500 }
@@ -117,7 +117,7 @@ export async function POST(request: Request) {
       
       return NextResponse.json(
         { 
-          message: 'You\'re on the list! Check your email for access details. Check your spam folder if you don\'t see it shortly.',
+          message: 'Thanks for subscribing to our newsletter! Check your email for a welcome message. Check your spam folder if you don\'t see it shortly.',
           emailSent: true
         },
         { status: 200 }
@@ -126,7 +126,7 @@ export async function POST(request: Request) {
       console.error('[ERROR] Error sending email', error);
       return NextResponse.json(
         { 
-          message: 'You\'ve been added to the waitlist, but we couldn\'t send the welcome email. Please try again later.',
+          message: 'You\'ve been subscribed to our newsletter, but we couldn\'t send the welcome email. Please try again later.',
           error: 'Email sending failed'
         },
         { status: 500 }

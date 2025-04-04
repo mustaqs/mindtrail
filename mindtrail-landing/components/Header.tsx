@@ -19,11 +19,14 @@ export default function Header() {
           <a href="#demo" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
             Demo
           </a>
+          <a href="#reviews" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+            Reviews
+          </a>
           <a 
-            href="#early-access" 
+            href="https://chromewebstore.google.com/detail/mindtrail-smart-tab-manag/jdlkiaielmolhdlgohcmoajjhdclchoa" 
             className="bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-600 transition-colors"
           >
-            Get Early Access
+            Get Mindtrail
           </a>
         </nav>
       </div>

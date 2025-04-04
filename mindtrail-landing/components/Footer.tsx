@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FaXTwitter } from 'react-icons/fa6';
+import { FaXTwitter, FaInstagram } from 'react-icons/fa6';
 
 export default function Footer() {
   return (
@@ -39,7 +39,7 @@ export default function Footer() {
         
         <div className="mt-8 pt-8 border-t border-gray-200 flex flex-col items-center">
           {/* Social Links */}
-          <div className="flex space-x-4 mb-4">
+          <div className="flex space-x-6 mb-4">
             <a 
               href="https://x.com/mindtrailapp" 
               target="_blank" 
@@ -48,6 +48,15 @@ export default function Footer() {
               aria-label="Follow us on X (Twitter)"
             >
               <FaXTwitter className="h-5 w-5" />
+            </a>
+            <a 
+              href="https://instagram.com/mindtrailhq" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+              aria-label="Follow us on Instagram"
+            >
+              <FaInstagram className="h-5 w-5" />
             </a>
           </div>
           

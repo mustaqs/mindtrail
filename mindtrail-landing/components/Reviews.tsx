@@ -45,7 +45,7 @@ export default function Reviews() {
             What People Are Saying
           </h2>
           <p className="text-gray-600 text-lg">
-            Join thousands of professionals who have transformed their browsing experience with Mindtrail.
+            Join professionals who have transformed their browsing experience with Mindtrail.
           </p>
         </div>
         
