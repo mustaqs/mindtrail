@@ -108,7 +108,7 @@ export const sendEarlyAccessEmail = async (email: string, directAdminClient?: Su
     const data = await resend.emails.send({
       from: 'Mindtrail <info@mindtrail.xyz>',
       to: email,
-      subject: 'Welcome to Mindtrail Early Access',
+      subject: 'Welcome to the MindTrail Newsletter',
       html: getEmailTemplate(email, downloadUrl),
     });
     
@@ -124,32 +124,33 @@ export const sendEarlyAccessEmail = async (email: string, directAdminClient?: Su
 function getEmailTemplate(email: string, downloadUrl: string) {
   return `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
-      <h1 style="color: #3b82f6; margin-bottom: 24px;">Welcome to Mindtrail Early Access!</h1>
+      <p>Hey there 👋</p>
       
-      <p>Thank you for signing up for early access to Mindtrail - Your Thinking Companion for the Web.</p>
+      <p>Thanks for signing up to follow along with MindTrail!<br>
+      We're excited to have you on this journey with us.</p>
       
-      <p>We're excited to have you join our community of early users who are looking for a better way to organize their browser tabs and boost productivity.</p>
+      <p>MindTrail is now officially live on the Chrome Web Store 🎉<br>
+      If you haven't already, you can install it here:<br>
+      👉 <a href="https://chromewebstore.google.com/detail/mindtrail-smart-tab-manag/jdlkiaielmolhdlgohcmoajjhdclchoa" style="color: #3b82f6; text-decoration: underline;">MindTrail Chrome Extension</a></p>
       
-      <h2 style="color: #3b82f6; margin-top: 32px; margin-bottom: 16px;">Getting Started</h2>
+      <p>MindTrail helps you:</p>
+      <ul style="margin-bottom: 24px;">
+        <li>🗂 Save your current browser sessions</li>
+        <li>📝 Add quick notes about what you were thinking</li>
+        <li>🔁 Reopen everything later with full clarity</li>
+      </ul>
       
-      <p>To get started with Mindtrail:</p>
+      <p>It's like leaving digital breadcrumbs for your brain — so you can always pick up right where you left off.</p>
       
-      <ol style="margin-bottom: 24px;">
-        <li>Download the Chrome extension <a href="${downloadUrl}" style="color: #3b82f6; text-decoration: underline;">here</a></li>
-        <li>Unzip the file on your computer</li>
-        <li>Open Chrome and go to chrome://extensions/</li>
-        <li>Enable "Developer mode" in the top-right corner</li>
-        <li>Click "Load unpacked" and select the unzipped folder</li>
-        <li>The Mindtrail icon will appear in your browser toolbar</li>
-      </ol>
+      <p>We'll send occasional updates on new features, improvements, and ideas to help you think and work better.</p>
       
-      <p>If you have any questions or feedback, please reply directly to this email. We're here to help!</p>
+      <p>In the meantime, feel free to hit reply and say hi — we'd love to hear how you're using MindTrail or what you'd like to see next.</p>
       
-      <p style="margin-top: 32px;">Happy browsing,<br>The Mindtrail Team</p>
+      <p style="margin-top: 32px;">Stay curious,<br>– The MindTrail Team<br>Your thinking companion 🧠</p>
       
       <div style="margin-top: 48px; padding-top: 16px; border-top: 1px solid #eaeaea; font-size: 12px; color: #666;">
-        <p>www.mindtrail.xyz | info@mindtrail.xyz</p>
-        <p>This email was sent to ${email} because you signed up for early access to Mindtrail.</p>
+        <p>www.mindtrail.xyz | support@mindtrail.xyz</p>
+        <p>This email was sent to ${email} because you signed up for the MindTrail newsletter.</p>
       </div>
     </div>
   `;

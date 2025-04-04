@@ -23,10 +23,10 @@ export default function Header() {
             Reviews
           </a>
           <a 
-            href="#early-access" 
+            href="https://chromewebstore.google.com/detail/mindtrail-smart-tab-manag/jdlkiaielmolhdlgohcmoajjhdclchoa" 
             className="bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-600 transition-colors"
           >
-            Join Early Access
+            Get Mindtrail
           </a>
         </nav>
       </div>

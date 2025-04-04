@@ -44,7 +44,7 @@ export default function EarlyAccess() {
       }
       
       setSubmitStatus('success');
-      setStatusMessage(data.message || 'Thanks for signing up! Check your email soon for access instructions.');
+      setStatusMessage(data.message || 'Thanks for joining the MindTrail newsletter! We\'ll keep you updated with the latest news and features.');
       setEmail('');
     } catch (error) {
       console.error('Submission error:', error);
@@ -60,10 +60,10 @@ export default function EarlyAccess() {
       <div className="max-w-3xl mx-auto px-6">
         <div className="bg-white rounded-lg p-10 shadow-lg border border-gray-200">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Get Early Access to Mindtrail</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Stay Updated With Mindtrail</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Be one of the first to experience the future of tab management. Sign up now 
-              and get exclusive early access to Mindtrail!
+              Join our newsletter to receive updates, tips, and be the first to know about new features. 
+              Never miss out on the latest Mindtrail developments!
             </p>
           </div>
 
@@ -91,7 +91,7 @@ export default function EarlyAccess() {
                 isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-blue-600'
               }`}
             >
-              {isSubmitting ? 'Submitting...' : 'Get Early Access'}
+              {isSubmitting ? 'Submitting...' : 'Join Now'}
             </button>
 
             {submitStatus === 'success' && (
@@ -107,7 +107,7 @@ export default function EarlyAccess() {
             )}
 
             <p className="mt-6 text-center text-gray-500 text-sm">
-              By signing up for early access, you agree to receive emails from Mindtrail. You will never share your information with third parties.
+              By joining our newsletter, you agree to receive emails from Mindtrail. We will never share your information with third parties.
             </p>
           </form>
         </div>
